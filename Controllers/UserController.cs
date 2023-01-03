@@ -19,14 +19,14 @@ namespace StockPortfolioApp.Controllers
         
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<ActionResult<List<User>>> GetAllUsers()
         {
             return Ok(users);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleUser(int id)
+        public async Task<ActionResult<User>> GetSingleUser(int id)
         {
             var user = users.Find(x => x.Id == id);
 
@@ -37,14 +37,14 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUser(User user)
+        public async Task<ActionResult<List<User>>> AddUser(User user)
         {
             users.Add(user);
-            return Ok(users);
+            return Ok(user);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUsera(int id, User request)
+        public async Task<ActionResult<List<User>>> UpdateUsera(int id, User request)
         {
             var user = users.Find(x => x.Id == id);
 
@@ -58,7 +58,7 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id, User request)
+        public async Task<ActionResult<List<User>>> DeleteUser(int id)
         {
             var user = users.Find(x => x.Id == id);
 

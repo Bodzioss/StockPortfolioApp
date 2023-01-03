@@ -20,27 +20,27 @@ namespace StockPortfolioApp.Controllers
         };
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTransactions()
+        public async Task<ActionResult<List<Transaction>>> GetAllTransactions()
         {
             return Ok(transactions);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleTransaction(int id)
+        public async Task<ActionResult<Transaction>> GetSingleTransaction(int id)
         {
             var transaction = transactions.Find(x => x.Id == id);
             return Ok(transaction);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTransaction(Transaction transaction)
+        public async Task<ActionResult<List<Transaction>>> AddTransaction(Transaction transaction)
         {
             transactions.Add(transaction);
             return Ok(transactions);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateTransaction(int id, Transaction request)
+        public async Task<ActionResult<List<Transaction>>> UpdateTransaction(int id, Transaction request)
         {
             var transaction = transactions.Find(x => x.Id == id);
 
@@ -52,11 +52,11 @@ namespace StockPortfolioApp.Controllers
             transaction.Value = request.Value;
             transaction.Amount = request.Amount;
 
-            return Ok(transaction);
+            return Ok(transactions);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteTransaction(int id)
+        public async Task<ActionResult<List<Transaction>>> DeleteTransaction(int id)
         {
             var transaction = transactions.Find(x => x.Id == id);
 

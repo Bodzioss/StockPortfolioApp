@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+
 
 namespace StockPortfolioApp.Controllers
 {
@@ -21,28 +21,28 @@ namespace StockPortfolioApp.Controllers
       
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPortfolioComponents()
+        public async Task<ActionResult<List<PortfolioComponent>>> GetAllPortfolioComponents()
         {
             return Ok(portfolioComponents);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSinglePortfolioComponent(int id)
+        public async Task<ActionResult<PortfolioComponent>> GetSinglePortfolioComponent(int id)
         {
             var portfolioComponent = portfolioComponents.Find(x => x.Id == id);
             return Ok(portfolioComponent);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPortfolioComponent(PortfolioComponent portfolioComponent)
+        public async Task<ActionResult<List<PortfolioComponent>>> AddPortfolioComponent(PortfolioComponent portfolioComponent)
         {
             portfolioComponents.Add(portfolioComponent);
-            return Ok(portfolioComponent);
+            return Ok(portfolioComponents);
         }
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePortfolioComponent(int id, PortfolioComponent request)
+        public async Task<ActionResult<List<PortfolioComponent>>> UpdatePortfolioComponent(int id, PortfolioComponent request)
         {
             var portfolioComponent = portfolioComponents.Find(x => x.Id == id);
 
@@ -55,7 +55,7 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePortfolioComponent(int id)
+        public async Task<ActionResult<List<PortfolioComponent>>> DeletePortfolioComponent(int id)
         {
             var portfolioComponent = portfolioComponents.Find(x => x.Id == id);
 

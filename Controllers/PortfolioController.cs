@@ -19,13 +19,13 @@ namespace StockPortfolioApp.Controllers
         };
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPortfolios()
+        public async Task<ActionResult<List<Portfolio>>> GetAllPortfolios()
         {
             return Ok(portfolios);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSinglePortfolio(int id)
+        public async Task<ActionResult<Portfolio>> GetSinglePortfolio(int id)
         {
             var portfolio = portfolios.Find(x => x.Id == id);
 
@@ -36,14 +36,14 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPortfolio(Portfolio portfolio)
+        public async Task<ActionResult<List<Portfolio>>> AddPortfolio(Portfolio portfolio)
         {
             portfolios.Add(portfolio);
-            return Ok(portfolio);
+            return Ok(portfolios);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePortfolio(int id, Portfolio request)
+        public async Task<ActionResult<List<Portfolio>>> UpdatePortfolio(int id, Portfolio request)
         {
             var portfolio = portfolios.Find(x => x.Id == id);
 
@@ -58,7 +58,7 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePortfolio(int id)
+        public async Task<ActionResult<List<Portfolio>>> DeletePortfolio(int id)
         {
             var portfolio = portfolios.Find(x => x.Id == id);
 
@@ -66,7 +66,7 @@ namespace StockPortfolioApp.Controllers
                 return NotFound("Sorry, but this portfolio does not exist.");
 
             portfolios.Remove(portfolio);
-            return Ok(portfolio);
+            return Ok(portfolios);
         }
     }
 }

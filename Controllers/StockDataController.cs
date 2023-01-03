@@ -20,32 +20,32 @@ namespace StockPortfolioApp.Controllers
         };
 
         [HttpGet]
-        public async Task<IActionResult> GetAllStockDatas()
+        public async Task<ActionResult<List<StockData>>> GetAllStockDatas()
         {
             return Ok(stockDatas);
         }
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleStockData(int id)
+        public async Task<ActionResult<StockData>> GetSingleStockData(int id)
         {
             var stockData = stockDatas.Find(x => x.Id == id);
 
             if (stockData is null)
                 return NotFound("Sorry, but this StockData does not exist.");
 
-            return Ok(stockDatas);
+            return Ok(stockData);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStockData(StockData stockData)
+        public async Task<ActionResult<List<StockData>>> AddStockData(StockData stockData)
         {
             stockDatas.Add(stockData);
             return Ok(stockDatas);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStockData(int id, StockData request)
+        public async Task<ActionResult<List<StockData>>> UpdateStockData(int id, StockData request)
         {
             var stockData = stockDatas.Find(x => x.Id == id);
 
@@ -61,7 +61,7 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStockData(int id, StockData request)
+        public async Task<ActionResult<List<StockData>>> DeleteStockData(int id)
         {
             var stockData = stockDatas.Find(x => x.Id == id);
 
@@ -72,6 +72,5 @@ namespace StockPortfolioApp.Controllers
 
             return Ok(stockDatas);
         }
-
     }
 }
