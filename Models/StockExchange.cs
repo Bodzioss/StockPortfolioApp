@@ -1,11 +1,9 @@
 ﻿namespace StockPortfolioApp.Models
 {
-    public class Stock
+    public class StockExchange
     {
         public int Id { get; set; }
         public String? Name { get; set; }
-        public String? Ticker { get; set; }
-        public int StockExchangeId { get; set; }
-
+        public String? Country { get; set; }
     }
 }
