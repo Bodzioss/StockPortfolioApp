@@ -9,8 +9,6 @@ namespace StockPortfolioApp.Services.StockDataService
         StockData GetSingleStockData(int id);
         List<StockData> AddStockData(StockData stockData);
         List<StockData> UpdateStockData(int id, StockData request);
-
         List<StockData> DeleteStockData(int id);
-
     }
 }
