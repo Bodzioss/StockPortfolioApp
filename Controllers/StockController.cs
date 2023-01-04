@@ -17,31 +17,31 @@ namespace StockPortfolioApp.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Stock>>> GetAllStocks()
         {
-            return Ok(_stockService.GetAllStocks());
+            return Ok(await _stockService.GetAllStocks());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Stock>> GetSingleStock(int id)
         {
-            return Ok(_stockService.GetSingleStock(id));
+            return Ok(await _stockService.GetSingleStock(id));
         }
 
         [HttpPost]
         public async Task<ActionResult<List<Stock>>> AddStock(Stock stock)
         {
-            return Ok(_stockService.AddStock(stock));
+            return Ok(await _stockService.AddStock(stock));
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Stock>>> UpdateStock(int id, Stock request)
         {
-            return Ok(_stockService.UpdateStock(id, request));
+            return Ok(await _stockService.UpdateStock(id, request));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Stock>>> DeleteStock(int id)
         {
-            return Ok(_stockService.DeleteStock(id));
+            return Ok(await _stockService.DeleteStock(id));
         }
     }
 }

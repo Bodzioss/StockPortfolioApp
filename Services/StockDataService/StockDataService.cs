@@ -13,13 +13,13 @@
                 }
         };
 
-        public List<StockData> AddStockData(StockData stockData)
+        public async Task<List<StockData>> AddStockData(StockData stockData)
         {
             stockDatas.Add(stockData);
             return stockDatas;
         }
 
-        public List<StockData> DeleteStockData(int id)
+        public async Task<List<StockData>> DeleteStockData(int id)
         {
             var stockData = stockDatas.Find(x => x.Id == id);
 
@@ -31,7 +31,7 @@
             return stockDatas;
         }
 
-        public StockData GetSingleStockData(int id)
+        public async Task<StockData> GetSingleStockData(int id)
         {
             var stockData = stockDatas.Find(x => x.Id == id);
 
@@ -41,12 +41,12 @@
             return stockData;
         }
 
-        public List<StockData> GetAllStockData()
+        public async Task<List<StockData>> GetAllStockData()
         {
             return stockDatas;
         }
 
-        public List<StockData> UpdateStockData(int id, StockData request)
+        public async Task<List<StockData>> UpdateStockData(int id, StockData request)
         {
             var stockData = stockDatas.Find(x => x.Id == id);
 

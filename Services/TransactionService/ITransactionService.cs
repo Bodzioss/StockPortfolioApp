@@ -4,10 +4,10 @@ namespace StockPortfolioApp.Services.TransactionService
 {
     public interface ITransactionService
     {
-        List<Transaction> GetAllTransactions();
-        Transaction GetSingleTransaction(int id);
-        List<Transaction> AddTransaction(Transaction transaction);
-        List<Transaction> UpdateTransaction(int id, Transaction request);
-        List<Transaction> DeleteTransaction(int id);
+        Task<List<Transaction>> GetAllTransactions();
+        Task<Transaction> GetSingleTransaction(int id);
+        Task<List<Transaction>> AddTransaction(Transaction transaction);
+        Task<List<Transaction>> UpdateTransaction(int id, Transaction request);
+        Task<List<Transaction>> DeleteTransaction(int id);
     }
 }

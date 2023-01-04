@@ -15,13 +15,13 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
                 }
         };
 
-        public List<PortfolioComponent> AddPortfolioComponent(PortfolioComponent portfolioComponent)
+        public async Task<List<PortfolioComponent>> AddPortfolioComponent(PortfolioComponent portfolioComponent)
         {
             portfolioComponents.Add(portfolioComponent);
             return portfolioComponents;
         }
 
-        public List<PortfolioComponent> DeletePortfolioComponent(int id)
+        public async Task<List<PortfolioComponent>> DeletePortfolioComponent(int id)
         {
             var portfolioComponent = portfolioComponents.Find(x => x.Id == id);
 
@@ -34,12 +34,12 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
             return portfolioComponents;
         }
 
-        public List<PortfolioComponent> GetAllPortfolioComponents()
+        public async Task<List<PortfolioComponent>> GetAllPortfolioComponents()
         {
             return portfolioComponents;
         }
 
-        public PortfolioComponent GetSinglePortfolioComponent(int id)
+        public async Task<PortfolioComponent> GetSinglePortfolioComponent(int id)
         {
             var portfolioComponent = portfolioComponents.Find(x => x.Id == id);
 
@@ -49,7 +49,7 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
             return portfolioComponent;
         }
 
-        public List<PortfolioComponent> UpdatePortfolioComponent(int id, PortfolioComponent request)
+        public async Task<List<PortfolioComponent>> UpdatePortfolioComponent(int id, PortfolioComponent request)
         {
             var portfolioComponent = portfolioComponents.Find(x => x.Id == id);
 

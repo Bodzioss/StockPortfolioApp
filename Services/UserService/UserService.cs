@@ -11,13 +11,13 @@
             }
         };
 
-        public List<User> AddUser(User user)
+        public async Task<List<User>> AddUser(User user)
         {
             users.Add(user);
             return users;
         }
 
-        public List<User> DeleteUser(int id)
+        public async Task<List<User>> DeleteUser(int id)
         {
             var user = users.Find(x => x.Id == id);
 
@@ -29,12 +29,12 @@
             return users;
         }
 
-        public List<User> GetAllUsers()
+        public async Task<List<User>> GetAllUsers()
         {
             return users;
         }
 
-        public User GetSingleUser(int id)
+        public async Task<User> GetSingleUser(int id)
         {
             var user = users.Find(x => x.Id == id);
 
@@ -44,7 +44,7 @@
             return user;
         }
 
-        public List<User> UpdateUser(int id, User request)
+        public async Task<List<User>> UpdateUser(int id, User request)
         {
             var user = users.Find(x => x.Id == id);
 

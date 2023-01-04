@@ -5,11 +5,11 @@ namespace StockPortfolioApp.Services.PortfolioService
 {
     public interface IPortfolioService
     {
-        List<Portfolio> GetAllPortfolios();
-        Portfolio GetSinglePortfolio(int id);
-        List<Portfolio> AddPortfolio(Portfolio portfolio);
-        List<Portfolio> UpdatePortfolio(int id, Portfolio request);
-        List<Portfolio> DeletePortfolio(int id);
+        Task<List<Portfolio>> GetAllPortfolios(); 
+        Task<Portfolio> GetSinglePortfolio(int id); 
+        Task<List<Portfolio>> AddPortfolio(Portfolio portfolio);
+        Task<List<Portfolio>> UpdatePortfolio(int id, Portfolio request); 
+        Task<List<Portfolio>> DeletePortfolio(int id);
 
     }
 }

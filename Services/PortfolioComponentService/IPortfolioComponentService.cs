@@ -5,10 +5,10 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
 {
     public interface IPortfolioComponentService
     {
-        List<PortfolioComponent> GetAllPortfolioComponents();
-        PortfolioComponent GetSinglePortfolioComponent(int id);
-        List<PortfolioComponent> AddPortfolioComponent(PortfolioComponent portfolioComponent);
-        List<PortfolioComponent> UpdatePortfolioComponent(int id, PortfolioComponent request);
-        List<PortfolioComponent> DeletePortfolioComponent(int id);
+        Task<List<PortfolioComponent>> GetAllPortfolioComponents();
+        Task<PortfolioComponent> GetSinglePortfolioComponent(int id);
+        Task<List<PortfolioComponent>> AddPortfolioComponent(PortfolioComponent portfolioComponent);
+        Task<List<PortfolioComponent>> UpdatePortfolioComponent(int id, PortfolioComponent request);
+        Task<List<PortfolioComponent>> DeletePortfolioComponent(int id);
     }
 }

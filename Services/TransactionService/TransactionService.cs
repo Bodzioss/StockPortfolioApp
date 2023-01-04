@@ -13,13 +13,13 @@
             }
         };
 
-        public List<Transaction> AddTransaction(Transaction transaction)
+        public async Task<List<Transaction>> AddTransaction(Transaction transaction)
         {
             transactions.Add(transaction);
             return transactions;
         }
 
-        public List<Transaction> DeleteTransaction(int id)
+        public async Task<List<Transaction>> DeleteTransaction(int id)
         {
             var transaction = transactions.Find(x => x.Id == id);
 
@@ -30,18 +30,18 @@
             return transactions;
         }
 
-        public List<Transaction> GetAllTransactions()
+        public async Task<List<Transaction>> GetAllTransactions()
         {
             return transactions;
         }
 
-        public Transaction GetSingleTransaction(int id)
+        public async Task<Transaction> GetSingleTransaction(int id)
         {
             var transaction = transactions.Find(x => x.Id == id);
             return transaction;
         }
 
-        public List<Transaction> UpdateTransaction(int id, Transaction request)
+        public async Task<List<Transaction>> UpdateTransaction(int id, Transaction request)
         {
             var transaction = transactions.Find(x => x.Id == id);
 

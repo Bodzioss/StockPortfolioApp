@@ -5,10 +5,10 @@ namespace StockPortfolioApp.Services.StockDataService
 {
     public interface IStockDataService
     {
-        List<StockData> GetAllStockData();
-        StockData GetSingleStockData(int id);
-        List<StockData> AddStockData(StockData stockData);
-        List<StockData> UpdateStockData(int id, StockData request);
-        List<StockData> DeleteStockData(int id);
+        Task<List<StockData>> GetAllStockData(); 
+        Task<StockData> GetSingleStockData(int id);
+        Task<List<StockData>> AddStockData(StockData stockData);
+        Task<List<StockData>> UpdateStockData(int id, StockData request); 
+        Task<List<StockData>> DeleteStockData(int id);
     }
 }

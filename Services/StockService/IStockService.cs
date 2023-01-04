@@ -4,10 +4,10 @@ namespace StockPortfolioApp.Services.StockService
 {
     public interface IStockService
     {
-        List<Stock> GetAllStocks();
-        Stock GetSingleStock(int id);
-        List<Stock> AddStock(Stock stock);
-        List<Stock> UpdateStock(int id, Stock request);
-        List<Stock> DeleteStock(int id);
+        Task<List<Stock>> GetAllStocks(); 
+        Task<Stock> GetSingleStock(int id); 
+        Task<List<Stock>> AddStock(Stock stock); 
+        Task<List<Stock>> UpdateStock(int id, Stock request); 
+        Task<List<Stock>> DeleteStock(int id);
     }
 }
