@@ -1,4 +1,8 @@
-﻿namespace StockPortfolioApp.Services.UserService
+﻿using StockPortfolioApp.Dtos.Transaction;
+using StockPortfolioApp.Dtos.User;
+using StockPortfolioApp.Models;
+
+namespace StockPortfolioApp.Services.UserService
 {
     public class UserService : IUserService
     {
@@ -10,60 +14,90 @@
                 LastName = "Last Name",
             }
         };
+        private readonly IMapper _mapper;
 
-        public async Task<ServiceResponse<List<User>>> AddUser(User user)
+        public UserService(IMapper mapper)
         {
-            var serviceResponse = new ServiceResponse<List<User>>();
-            users.Add(user);
-            serviceResponse.Data = users;
+            _mapper = mapper;
+        }
+
+        public async Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto user)
+        {
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            users.Add(_mapper.Map<User>(user));
+            serviceResponse.Data = users.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<User>>> DeleteUser(int id)
+        public async Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id)
         {
-            var serviceResponse = new ServiceResponse<List<User>>();
-            var user = users.Find(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            try
+            {
+                var user = users.Find(x => x.Id == id);
 
-            if (user is null)
-                return null;
+                if (user is null)
+                    throw new Exception($"User with Id '{id}' not found.");
 
-            users.Remove(user);
+                users.Remove(user);
 
-            serviceResponse.Data = users;
+                serviceResponse.Data = users.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<User>>> GetAllUsers()
+        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUsers()
         {
-            var serviceResponse = new ServiceResponse<List<User>>();
-            serviceResponse.Data = users;
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            serviceResponse.Data = users.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<User>> GetSingleUser(int id)
+        public async Task<ServiceResponse<GetUserDto>> GetSingleUser(int id)
         {
-            var serviceResponse = new ServiceResponse<User>();
-            var user = users.Find(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<GetUserDto>();
+            try
+            {
+                var user = users.Find(x => x.Id == id);
 
-            if (user is null)
-                return null;
+                if (user is null)
+                    throw new Exception($"User with Id '{id}' not found.");
 
-            serviceResponse.Data = user;
+                serviceResponse.Data = _mapper.Map<GetUserDto>(user);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<User>>> UpdateUser(int id, User request)
+        public async Task<ServiceResponse<List<GetUserDto>>> UpdateUser(int id, AddUserDto request)
         {
-            var serviceResponse = new ServiceResponse<List<User>>();
-            var user = users.Find(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            try
+            {
+                var user = users.Find(x => x.Id == id);
 
-            if (user is null)
-                return null;
+                if (user is null)
+                    throw new Exception($"User with Id '{id}' not found.");
 
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
+                user.FirstName = request.FirstName;
+                user.LastName = request.LastName;
 
-            serviceResponse.Data = users;
+                serviceResponse.Data = users.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
     }

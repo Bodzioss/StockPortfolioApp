@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Dtos.Stock;
 using StockPortfolioApp.Services.StockService;
 
 namespace StockPortfolioApp.Controllers
@@ -15,33 +16,48 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<Stock>>>> GetAllStocks()
+        public async Task<ActionResult<ServiceResponse<List<GetStockDto>>>> GetAllStocks()
         {
             return Ok(await _stockService.GetAllStocks());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<Stock>>> GetSingleStock(int id)
+        public async Task<ActionResult<ServiceResponse<GetStockDto>>> GetSingleStock(int id)
         {
-            return Ok(await _stockService.GetSingleStock(id));
+            var response = await _stockService.GetSingleStock(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<Stock>>>> AddStock(Stock stock)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDto>>>> AddStock(AddStockDto stock)
         {
             return Ok(await _stockService.AddStock(stock));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<Stock>>>> UpdateStock(int id, Stock request)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDto>>>> UpdateStock(int id, AddStockDto request)
         {
-            return Ok(await _stockService.UpdateStock(id, request));
+            var response = await _stockService.UpdateStock(id,request);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<Stock>>>> DeleteStock(int id)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDto>>>> DeleteStock(int id)
         {
-            return Ok(await _stockService.DeleteStock(id));
+            var response = await _stockService.DeleteStock(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }

@@ -1,4 +1,5 @@
 global using StockPortfolioApp.Models;
+global using AutoMapper;
 using StockPortfolioApp.Services.PortfolioComponentService;
 using StockPortfolioApp.Services.PortfolioService;
 using StockPortfolioApp.Services.StockDataService;
@@ -20,6 +21,8 @@ builder.Services.AddScoped<IStockDataService, StockDataService>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 

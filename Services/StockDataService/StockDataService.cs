@@ -1,4 +1,8 @@
-﻿namespace StockPortfolioApp.Services.StockDataService
+﻿using StockPortfolioApp.Dtos.Portfolio;
+using StockPortfolioApp.Dtos.StockData;
+using StockPortfolioApp.Models;
+
+namespace StockPortfolioApp.Services.StockDataService
 {
     public class StockDataService : IStockDataService
     {
@@ -12,62 +16,92 @@
                     RegisterTimestamp = DateTime.Now
                 }
         };
+        private readonly IMapper _mapper;
 
-        public async Task<ServiceResponse<List<StockData>>> AddStockData(StockData stockData)
+        public StockDataService(IMapper mapper)
         {
-            var serviceResponse = new ServiceResponse<List<StockData>>();
-            stockDatas.Add(stockData);
-            serviceResponse.Data = stockDatas;
+            _mapper = mapper;
+        }
+
+        public async Task<ServiceResponse<List<GetStockDataDto>>> AddStockData(AddStockDataDto stockData)
+        {
+            var serviceResponse = new ServiceResponse<List<GetStockDataDto>>();
+            stockDatas.Add(_mapper.Map<StockData>(stockData));
+            serviceResponse.Data = stockDatas.Select(stockData => _mapper.Map<GetStockDataDto>(stockData)).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<StockData>>> DeleteStockData(int id)
+        public async Task<ServiceResponse<List<GetStockDataDto>>> DeleteStockData(int id)
         {
-            var serviceResponse = new ServiceResponse<List<StockData>>();
+            var serviceResponse = new ServiceResponse<List<GetStockDataDto>>();
+            try
+            { 
             var stockData = stockDatas.Find(x => x.Id == id);
 
             if (stockData is null)
-                return null;
+                    throw new Exception($"Stock data with Id '{id}' not found.");
 
-            stockDatas.Remove(stockData);
+                stockDatas.Remove(stockData);
 
-            serviceResponse.Data = stockDatas;
+            serviceResponse.Data = stockDatas.Select(stockData => _mapper.Map<GetStockDataDto>(stockData)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<StockData>> GetSingleStockData(int id)
+        public async Task<ServiceResponse<GetStockDataDto>> GetSingleStockData(int id)
         {
-            var serviceResponse = new ServiceResponse<StockData>();
-            var stockData = stockDatas.Find(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<GetStockDataDto>();
+            try
+            { 
+                var stockData = stockDatas.Find(x => x.Id == id);
 
-            if (stockData is null)
-                return null;
+                if (stockData is null)
+                    throw new Exception($"Stock data with Id '{id}' not found.");
 
-            serviceResponse.Data = stockData;
+                serviceResponse.Data = _mapper.Map<GetStockDataDto>(stockData);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<StockData>>> GetAllStockData()
+        public async Task<ServiceResponse<List<GetStockDataDto>>> GetAllStockData()
         {
-            var serviceResponse = new ServiceResponse<List<StockData>>();
-            serviceResponse.Data = stockDatas;
+            var serviceResponse = new ServiceResponse<List<GetStockDataDto>>();
+            serviceResponse.Data = stockDatas.Select(stockData => _mapper.Map<GetStockDataDto>(stockData)).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<StockData>>> UpdateStockData(int id, StockData request)
+        public async Task<ServiceResponse<List<GetStockDataDto>>> UpdateStockData(int id, AddStockDataDto request)
         {
-            var serviceResponse = new ServiceResponse<List<StockData>>();
-            var stockData = stockDatas.Find(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<List<GetStockDataDto>>();
+            try
+            { 
+                var stockData = stockDatas.FirstOrDefault(x => x.Id == id);
 
-            if (stockData is null)
-                return null;
+                if (stockData is null)
+                    throw new Exception($"Stock data with Id '{id}' not found.");
 
-            stockData.StockId = request.StockId;
-            stockData.Value = request.Value;
-            stockData.Volume = request.Volume;
-            stockData.RegisterTimestamp = request.RegisterTimestamp;
+                stockData.StockId = request.StockId;
+                stockData.Value = request.Value;
+                stockData.Volume = request.Volume;
+                stockData.RegisterTimestamp = request.RegisterTimestamp;
 
-            serviceResponse.Data = stockDatas;
+                serviceResponse.Data = stockDatas.Select(stockData => _mapper.Map<GetStockDataDto>(stockData)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
     }

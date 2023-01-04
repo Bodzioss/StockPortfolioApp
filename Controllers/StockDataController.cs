@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Dtos.StockData;
 using StockPortfolioApp.Services.StockDataService;
 
 namespace StockPortfolioApp.Controllers
@@ -15,34 +16,49 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<StockData>>>> GetAllStockDatas()
+        public async Task<ActionResult<ServiceResponse<List<GetStockDataDto>>>> GetAllStockDatas()
         {
             return Ok(await _stockDataService.GetAllStockData());
         }
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<StockData>>> GetSingleStockData(int id)
+        public async Task<ActionResult<ServiceResponse<GetStockDataDto>>> GetSingleStockData(int id)
         {
-            return Ok(await _stockDataService.GetSingleStockData(id));
+            var response = await _stockDataService.GetSingleStockData(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<StockData>>>> AddStockData(StockData stockData)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDataDto>>>> AddStockData(AddStockDataDto stockData)
         {
             return Ok(await _stockDataService.AddStockData(stockData));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<StockData>>>> UpdateStockData(int id, StockData request)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDataDto>>>> UpdateStockData(int id, AddStockDataDto request)
         {
-            return Ok(await _stockDataService.UpdateStockData(id,request));
+            var response = await _stockDataService.UpdateStockData(id,request);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<StockData>>>> DeleteStockData(int id)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDataDto>>>> DeleteStockData(int id)
         {
-            return Ok(await _stockDataService.DeleteStockData(id));
+            var response = await _stockDataService.DeleteStockData(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }

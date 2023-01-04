@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+﻿using StockPortfolioApp.Dtos.Portfolio;
 
 namespace StockPortfolioApp.Services.PortfolioService
 {
     public interface IPortfolioService
     {
-        Task<ServiceResponse<List<Portfolio>>> GetAllPortfolios(); 
-        Task<ServiceResponse<Portfolio>> GetSinglePortfolio(int id); 
-        Task<ServiceResponse<List<Portfolio>>> AddPortfolio(Portfolio portfolio);
-        Task<ServiceResponse<List<Portfolio>>> UpdatePortfolio(int id, Portfolio request); 
-        Task<ServiceResponse<List<Portfolio>>> DeletePortfolio(int id);
+        Task<ServiceResponse<List<GetPortfolioDto>>> GetAllPortfolios(); 
+        Task<ServiceResponse<GetPortfolioDto>> GetSinglePortfolio(int id); 
+        Task<ServiceResponse<List<GetPortfolioDto>>> AddPortfolio(AddPortfolioDto portfolio);
+        Task<ServiceResponse<List<GetPortfolioDto>>> UpdatePortfolio(int id, AddPortfolioDto request); 
+        Task<ServiceResponse<List<GetPortfolioDto>>> DeletePortfolio(int id);
 
     }
 }

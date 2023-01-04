@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Dtos.User;
 using StockPortfolioApp.Models;
 
 namespace StockPortfolioApp.Services.UserService
 {
     public interface IUserService
     {
-        Task<ServiceResponse<List<User>>> GetAllUsers();
-        Task<ServiceResponse<User>> GetSingleUser(int id);
-        Task<ServiceResponse<List<User>>> AddUser(User user);
-        Task<ServiceResponse<List<User>>> UpdateUser(int id, User request);
-        Task<ServiceResponse<List<User>>> DeleteUser(int id);
+        Task<ServiceResponse<List<GetUserDto>>> GetAllUsers();
+        Task<ServiceResponse<GetUserDto>> GetSingleUser(int id);
+        Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto user);
+        Task<ServiceResponse<List<GetUserDto>>> UpdateUser(int id, AddUserDto request);
+        Task<ServiceResponse<List<GetUserDto>>> DeleteUser(int id);
     }
 }

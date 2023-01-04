@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Dtos.PortfolioComponent;
 using StockPortfolioApp.Services.PortfolioComponentService;
 
 namespace StockPortfolioApp.Controllers
@@ -15,33 +16,48 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ServiceResponse<PortfolioComponent>>>> GetAllPortfolioComponents()
+        public async Task<ActionResult<List<ServiceResponse<GetPortfolioComponentDto>>>> GetAllPortfolioComponents()
         {
             return Ok(await _portfolioComponentService.GetAllPortfolioComponents());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<PortfolioComponent>>> GetSinglePortfolioComponent(int id)
+        public async Task<ActionResult<ServiceResponse<GetPortfolioComponentDto>>> GetSinglePortfolioComponent(int id)
         {
-            return Ok(await _portfolioComponentService.GetSinglePortfolioComponent(id));
+            var response = await _portfolioComponentService.GetSinglePortfolioComponent(id);
+            if(response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<ServiceResponse<PortfolioComponent>>>> AddPortfolioComponent(PortfolioComponent portfolioComponent)
+        public async Task<ActionResult<List<ServiceResponse<GetPortfolioComponentDto>>>> AddPortfolioComponent(AddPortfolioComponentDto portfolioComponent)
         {
             return Ok(await _portfolioComponentService.AddPortfolioComponent(portfolioComponent));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<ServiceResponse<PortfolioComponent>>>> UpdatePortfolioComponent(int id, PortfolioComponent request)
+        public async Task<ActionResult<List<ServiceResponse<GetPortfolioComponentDto>>>> UpdatePortfolioComponent(int id, AddPortfolioComponentDto request)
         {
-            return Ok(await _portfolioComponentService.UpdatePortfolioComponent(id, request));
+            var response = await _portfolioComponentService.UpdatePortfolioComponent(id,request);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<ServiceResponse<PortfolioComponent>>>> DeletePortfolioComponent(int id)
+        public async Task<ActionResult<List<ServiceResponse<GetPortfolioComponentDto>>>> DeletePortfolioComponent(int id)
         {
-            return Ok(await _portfolioComponentService.DeletePortfolioComponent(id));
+            var response = await _portfolioComponentService.DeletePortfolioComponent(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }

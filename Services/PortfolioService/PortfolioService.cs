@@ -1,4 +1,6 @@
-﻿using StockPortfolioApp.Models;
+﻿using StockPortfolioApp.Dtos.Portfolio;
+using StockPortfolioApp.Dtos.PortfolioComponent;
+using StockPortfolioApp.Models;
 
 namespace StockPortfolioApp.Services.PortfolioService
 {
@@ -13,60 +15,90 @@ namespace StockPortfolioApp.Services.PortfolioService
                     Description = "First Portfolio Description",
                 }
         };
+        private readonly IMapper _mapper;
 
-        public async Task<ServiceResponse<List<Portfolio>>> AddPortfolio(Portfolio portfolio)
+        public PortfolioService(IMapper mapper)
         {
-            var serviceResponse = new ServiceResponse<List<Portfolio>>();
-            portfolios.Add(portfolio);
-            serviceResponse.Data = portfolios;
+            _mapper = mapper;
+        }
+
+        public async Task<ServiceResponse<List<GetPortfolioDto>>> AddPortfolio(AddPortfolioDto portfolio)
+        {
+            var serviceResponse = new ServiceResponse<List<GetPortfolioDto>>();
+            portfolios.Add(_mapper.Map<Portfolio>(portfolio));
+            serviceResponse.Data = portfolios.Select(portfolio => _mapper.Map<GetPortfolioDto>(portfolio)).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<Portfolio>>> DeletePortfolio(int id)
+        public async Task<ServiceResponse<List<GetPortfolioDto>>> DeletePortfolio(int id)
         {
-            var serviceResponse = new ServiceResponse<List<Portfolio>>();
-            var portfolio = portfolios.Find(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<List<GetPortfolioDto>>();
+            try
+            {
+                var portfolio = portfolios.FirstOrDefault(x => x.Id == id);
 
-            if (portfolio == null)
-                return null;
+                if (portfolio == null)
+                    throw new Exception($"Portfolio with Id '{id}' not found.");
 
-            portfolios.Remove(portfolio);
-            serviceResponse.Data = portfolios;
+                portfolios.Remove(portfolio);
+                serviceResponse.Data = portfolios.Select(portfolio => _mapper.Map<GetPortfolioDto>(portfolio)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<Portfolio>>> GetAllPortfolios()
+        public async Task<ServiceResponse<List<GetPortfolioDto>>> GetAllPortfolios()
         {
-            var serviceResponse = new ServiceResponse<List<Portfolio>>();
-            serviceResponse.Data = portfolios;
+            var serviceResponse = new ServiceResponse<List<GetPortfolioDto>>();
+            serviceResponse.Data = portfolios.Select(portfolio => _mapper.Map<GetPortfolioDto>(portfolio)).ToList();
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<Portfolio>> GetSinglePortfolio(int id)
+        public async Task<ServiceResponse<GetPortfolioDto>> GetSinglePortfolio(int id)
         {
-            var serviceResponse = new ServiceResponse<Portfolio>();
-            var portfolio = portfolios.Find(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<GetPortfolioDto>();
+            try
+            {
+                var portfolio = portfolios.FirstOrDefault(x => x.Id == id);
 
-            if (portfolio == null)
-                return null;
+                if (portfolio == null)
+                    throw new Exception($"Portfolio with Id '{id}' not found.");
 
-            serviceResponse.Data = portfolio;
+                serviceResponse.Data = _mapper.Map<GetPortfolioDto>(portfolio);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<Portfolio>>> UpdatePortfolio(int id, Portfolio request)
+        public async Task<ServiceResponse<List<GetPortfolioDto>>> UpdatePortfolio(int id, AddPortfolioDto request)
         {
-            var serviceResponse = new ServiceResponse<List<Portfolio>>();
-            var portfolio = portfolios.Find(x => x.Id == id);
+            var serviceResponse = new ServiceResponse<List<GetPortfolioDto>>();
+            try
+            {
+                var portfolio = portfolios.FirstOrDefault(x => x.Id == id);
 
-            if (portfolio == null)
-                return null;
+                if (portfolio == null)
+                    throw new Exception($"Portfolio with Id '{id}' not found.");
 
-            portfolio.UserId = request.UserId;
-            portfolio.Name = request.Name;
-            portfolio.Description = request.Description;
+                portfolio.UserId = request.UserId;
+                portfolio.Name = request.Name;
+                portfolio.Description = request.Description;
 
-            serviceResponse.Data = portfolios;
+                serviceResponse.Data = portfolios.Select(portfolio => _mapper.Map<GetPortfolioDto>(portfolio)).ToList();
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
     }
