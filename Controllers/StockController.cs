@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Dtos.Stock;
+using StockPortfolioApp.Services.StockService;
 
 namespace StockPortfolioApp.Controllers
 {
@@ -8,67 +8,56 @@ namespace StockPortfolioApp.Controllers
     [ApiController]
     public class StockController : ControllerBase
     {
-        public static List<Stock> stocks = new List<Stock> { 
-                new Stock
-                {
-                    Id = 1,
-                    Name = "CDProjektRed",
-                    Ticker = "CDP",
-                    StockExchangeId = 1
-                }
-        };
- 
+        private readonly IStockService _stockService;
+
+        public StockController(IStockService stockService)
+        {
+            _stockService = stockService;
+        }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllStocks()
+        public async Task<ActionResult<ServiceResponse<List<GetStockDto>>>> GetAllStocks()
         {
-            return Ok(stocks);
+            return Ok(await _stockService.GetAllStocks());
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleStock(int id)
+        public async Task<ActionResult<ServiceResponse<GetStockDto>>> GetSingleStock(int id)
         {
-            var stock = stocks.Find(x => x.Id == id);
-
-            if (stock == null)
-                return NotFound("Sorry, but this stock does not exist.");
-
-            return Ok(stocks);
+            var response = await _stockService.GetSingleStock(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStock(Stock stock)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDto>>>> AddStock(AddStockDto stock)
         {
-            stocks.Add(stock);
-            return Ok(stocks);
+            return Ok(await _stockService.AddStock(stock));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStock(int id, Stock request)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDto>>>> UpdateStock(int id, AddStockDto request)
         {
-            var stock = stocks.Find(x => x.Id == id);
-
-            if (stock == null)
-                return NotFound("Sorry, but this stock does not exist.");
-
-            stock.Name = request.Name;
-            stock.Ticker = request.Ticker;
-            stock.StockExchangeId= request.StockExchangeId;
-
-            return Ok(stocks);
+            var response = await _stockService.UpdateStock(id,request);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStock(int id)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDto>>>> DeleteStock(int id)
         {
-            var stock = stocks.Find(x => x.Id == id);
-
-            if (stock == null)
-                return NotFound("Sorry, but this stock does not exist.");
-
-            stocks.Remove(stock);
-
-            return Ok(stocks);
+            var response = await _stockService.DeleteStock(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }

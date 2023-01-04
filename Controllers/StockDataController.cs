@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Dtos.StockData;
+using StockPortfolioApp.Services.StockDataService;
 
 namespace StockPortfolioApp.Controllers
 {
@@ -8,70 +8,57 @@ namespace StockPortfolioApp.Controllers
     [ApiController]
     public class StockDataController : ControllerBase
     {
-        public static List<StockData> stockDatas = new List<StockData>() { 
-                new StockData
-                {
-                    Id = 1,
-                    StockId = 1,
-                    Value = 1,
-                    Volume = 1,
-                    RegisterTimestamp = DateTime.Now
-                }
-        };
+        private readonly IStockDataService _stockDataService;
+
+        public StockDataController(IStockDataService stockDataService)
+        {
+            _stockDataService = stockDataService;
+        }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllStockDatas()
+        public async Task<ActionResult<ServiceResponse<List<GetStockDataDto>>>> GetAllStockDatas()
         {
-            return Ok(stockDatas);
+            return Ok(await _stockDataService.GetAllStockData());
         }
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleStockData(int id)
+        public async Task<ActionResult<ServiceResponse<GetStockDataDto>>> GetSingleStockData(int id)
         {
-            var stockData = stockDatas.Find(x => x.Id == id);
-
-            if (stockData is null)
-                return NotFound("Sorry, but this StockData does not exist.");
-
-            return Ok(stockDatas);
+            var response = await _stockDataService.GetSingleStockData(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStockData(StockData stockData)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDataDto>>>> AddStockData(AddStockDataDto stockData)
         {
-            stockDatas.Add(stockData);
-            return Ok(stockDatas);
+            return Ok(await _stockDataService.AddStockData(stockData));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStockData(int id, StockData request)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDataDto>>>> UpdateStockData(int id, AddStockDataDto request)
         {
-            var stockData = stockDatas.Find(x => x.Id == id);
-
-            if (stockData is null)
-                return NotFound("Sorry, but this StockData does not exist.");
-
-            stockData.StockId = request.StockId;
-            stockData.Value = request.Value;
-            stockData.Volume = request.Volume;
-            stockData.RegisterTimestamp = request.RegisterTimestamp;
-
-            return Ok(stockDatas);
+            var response = await _stockDataService.UpdateStockData(id,request);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStockData(int id, StockData request)
+        public async Task<ActionResult<ServiceResponse<List<GetStockDataDto>>>> DeleteStockData(int id)
         {
-            var stockData = stockDatas.Find(x => x.Id == id);
-
-            if (stockData is null)
-                return NotFound("Sorry, but this StockData does not exist.");
-
-            stockDatas.Remove(stockData);
-
-            return Ok(stockDatas);
+            var response = await _stockDataService.DeleteStockData(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
-
     }
 }

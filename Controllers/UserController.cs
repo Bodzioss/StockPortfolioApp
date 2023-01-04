@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Dtos.User;
+using StockPortfolioApp.Services.UserService;
 
 namespace StockPortfolioApp.Controllers
 {
@@ -8,66 +8,57 @@ namespace StockPortfolioApp.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private static List<User> users = new List<User> { 
-            new User
-            {
-                Id = 1,
-                FirstName = "First Name",
-                LastName = "Last Name",
-            }
-        };
-        
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> GetAllUsers()
         {
-            return Ok(users);
+            return Ok(await _userService.GetAllUsers());
         }
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleUser(int id)
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetSingleUser(int id)
         {
-            var user = users.Find(x => x.Id == id);
-
-            if (user is null)
-                return NotFound("Sorry, but this StockData does not exist.");
-
-            return Ok(users);
+            var response = await _userService.GetSingleUser(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUser(User user)
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> AddUser(AddUserDto user)
         {
-            users.Add(user);
-            return Ok(users);
+            return Ok(await _userService.AddUser(user));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUsera(int id, User request)
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> UpdateUser(int id, AddUserDto request)
         {
-            var user = users.Find(x => x.Id == id);
-
-            if (user is null)
-                return NotFound("Sorry, but this StockData does not exist.");
-
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
-
-            return Ok(users);
+            var response = await _userService.UpdateUser(id,request);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id, User request)
+        public async Task<ActionResult<ServiceResponse<List<GetUserDto>>>> DeleteUser(int id)
         {
-            var user = users.Find(x => x.Id == id);
-
-            if (user is null)
-                return NotFound("Sorry, but this StockData does not exist.");
-
-            users.Remove(user);
-
-            return Ok(users);
+            var response = await _userService.DeleteUser(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }

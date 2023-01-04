@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Dtos.Transaction;
+using StockPortfolioApp.Services.TransactionService;
 
 namespace StockPortfolioApp.Controllers
 {
@@ -8,63 +8,56 @@ namespace StockPortfolioApp.Controllers
     [ApiController]
     public class TransactionController : ControllerBase
     {
-        private static List<Transaction> transactions = new List<Transaction> {
-            new Transaction
-            {
-                Id = 1,
-                StockId = 1,
-                PortfolioId = 1,
-                Value = 1,
-                Amount = 1
-            }
-        };
+        private readonly ITransactionService _transactionService;
+
+        public TransactionController(ITransactionService transactionService)
+        {
+            _transactionService = transactionService;
+        }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTransactions()
+        public async Task<ActionResult<ServiceResponse<List<GetTransactionDto>>>> GetAllTransactions()
         {
-            return Ok(transactions);
+            return Ok(await _transactionService.GetAllTransactions());
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSingleTransaction(int id)
+        public async Task<ActionResult<ServiceResponse<GetTransactionDto>>> GetSingleTransaction(int id)
         {
-            var transaction = transactions.Find(x => x.Id == id);
-            return Ok(transaction);
+            var response = await _transactionService.GetSingleTransaction(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTransaction(Transaction transaction)
+        public async Task<ActionResult<ServiceResponse<List<GetTransactionDto>>>> AddTransaction(AddTransactionDto transaction)
         {
-            transactions.Add(transaction);
-            return Ok(transactions);
+            return Ok(await _transactionService.AddTransaction(transaction));
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateTransaction(int id, Transaction request)
+        public async Task<ActionResult<ServiceResponse<List<GetTransactionDto>>>> UpdateTransaction(int id, AddTransactionDto request)
         {
-            var transaction = transactions.Find(x => x.Id == id);
-
-            if(transaction is null)
-                return NotFound("Sorry, but this transaction does not exists.");
-
-            transaction.StockId = request.StockId;
-            transaction.PortfolioId= request.PortfolioId;
-            transaction.Value = request.Value;
-            transaction.Amount = request.Amount;
-
-            return Ok(transaction);
+            var response = await _transactionService.UpdateTransaction(id,request);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteTransaction(int id)
+        public async Task<ActionResult<ServiceResponse<List<GetTransactionDto>>>> DeleteTransaction(int id)
         {
-            var transaction = transactions.Find(x => x.Id == id);
-
-            if (transaction is null)
-                return NotFound("Sorry, but this transaction does not exists.");
-
-            transactions.Remove(transaction);
-            return Ok(transactions);
+            var response = await _transactionService.DeleteTransaction(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }
