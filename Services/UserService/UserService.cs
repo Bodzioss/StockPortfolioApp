@@ -11,14 +11,17 @@
             }
         };
 
-        public async Task<List<User>> AddUser(User user)
+        public async Task<ServiceResponse<List<User>>> AddUser(User user)
         {
+            var serviceResponse = new ServiceResponse<List<User>>();
             users.Add(user);
-            return users;
+            serviceResponse.Data = users;
+            return serviceResponse;
         }
 
-        public async Task<List<User>> DeleteUser(int id)
+        public async Task<ServiceResponse<List<User>>> DeleteUser(int id)
         {
+            var serviceResponse = new ServiceResponse<List<User>>();
             var user = users.Find(x => x.Id == id);
 
             if (user is null)
@@ -26,26 +29,32 @@
 
             users.Remove(user);
 
-            return users;
+            serviceResponse.Data = users;
+            return serviceResponse;
         }
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<ServiceResponse<List<User>>> GetAllUsers()
         {
-            return users;
+            var serviceResponse = new ServiceResponse<List<User>>();
+            serviceResponse.Data = users;
+            return serviceResponse;
         }
 
-        public async Task<User> GetSingleUser(int id)
+        public async Task<ServiceResponse<User>> GetSingleUser(int id)
         {
+            var serviceResponse = new ServiceResponse<User>();
             var user = users.Find(x => x.Id == id);
 
             if (user is null)
                 return null;
 
-            return user;
+            serviceResponse.Data = user;
+            return serviceResponse;
         }
 
-        public async Task<List<User>> UpdateUser(int id, User request)
+        public async Task<ServiceResponse<List<User>>> UpdateUser(int id, User request)
         {
+            var serviceResponse = new ServiceResponse<List<User>>();
             var user = users.Find(x => x.Id == id);
 
             if (user is null)
@@ -54,7 +63,8 @@
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
 
-            return users;
+            serviceResponse.Data = users;
+            return serviceResponse;
         }
     }
 }

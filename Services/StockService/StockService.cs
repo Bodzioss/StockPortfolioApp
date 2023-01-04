@@ -12,14 +12,17 @@
                 }
         };
 
-        public async Task<List<Stock>> AddStock(Stock stock)
+        public async Task<ServiceResponse<List<Stock>>> AddStock(Stock stock)
         {
+            var serviceResponse = new ServiceResponse<List<Stock>>();
             stocks.Add(stock);
-            return stocks;
+            serviceResponse.Data = stocks;
+            return serviceResponse;
         }
 
-        public async Task<List<Stock>> DeleteStock(int id)
+        public async Task<ServiceResponse<List<Stock>>> DeleteStock(int id)
         {
+            var serviceResponse = new ServiceResponse<List<Stock>>();
             var stock = stocks.Find(x => x.Id == id);
 
             if (stock == null)
@@ -27,26 +30,32 @@
 
             stocks.Remove(stock);
 
-            return stocks;
+            serviceResponse.Data = stocks;
+            return serviceResponse;
         }
 
-        public async Task<List<Stock>> GetAllStocks()
+        public async Task<ServiceResponse<List<Stock>>> GetAllStocks()
         {
-            return stocks;
+            var serviceResponse = new ServiceResponse<List<Stock>>();
+            serviceResponse.Data = stocks;
+            return serviceResponse;
         }
 
-        public async Task<Stock> GetSingleStock(int id)
+        public async Task<ServiceResponse<Stock>> GetSingleStock(int id)
         {
+            var serviceResponse = new ServiceResponse<Stock>();
             var stock = stocks.Find(x => x.Id == id);
 
             if (stock == null)
                 return null;
 
-            return stock;
+            serviceResponse.Data = stock;
+            return serviceResponse;
         }
 
-        public async Task<List<Stock>> UpdateStock(int id, Stock request)
+        public async Task<ServiceResponse<List<Stock>>> UpdateStock(int id, Stock request)
         {
+            var serviceResponse = new ServiceResponse<List<Stock>>();
             var stock = stocks.Find(x => x.Id == id);
 
             if (stock == null)
@@ -56,7 +65,8 @@
             stock.Ticker = request.Ticker;
             stock.StockExchangeId = request.StockExchangeId;
 
-            return stocks;
+            serviceResponse.Data = stocks;
+            return serviceResponse;
         }
     }
 }

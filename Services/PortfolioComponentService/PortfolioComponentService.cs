@@ -15,42 +15,50 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
                 }
         };
 
-        public async Task<List<PortfolioComponent>> AddPortfolioComponent(PortfolioComponent portfolioComponent)
+        public async Task<ServiceResponse<List<PortfolioComponent>>> AddPortfolioComponent(PortfolioComponent portfolioComponent)
         {
+            var serviceResponse = new ServiceResponse<List<PortfolioComponent>>();
             portfolioComponents.Add(portfolioComponent);
-            return portfolioComponents;
+            serviceResponse.Data = portfolioComponents;
+            return serviceResponse;
         }
 
-        public async Task<List<PortfolioComponent>> DeletePortfolioComponent(int id)
+        public async Task<ServiceResponse<List<PortfolioComponent>>> DeletePortfolioComponent(int id)
         {
+            var serviceResponse = new ServiceResponse<List<PortfolioComponent>>();
             var portfolioComponent = portfolioComponents.Find(x => x.Id == id);
-
 
             if (portfolioComponent == null)
                 return null;
 
             portfolioComponents.Remove(portfolioComponent);
 
-            return portfolioComponents;
+            serviceResponse.Data = portfolioComponents;
+            return serviceResponse;
         }
 
-        public async Task<List<PortfolioComponent>> GetAllPortfolioComponents()
+        public async Task<ServiceResponse<List<PortfolioComponent>>> GetAllPortfolioComponents()
         {
-            return portfolioComponents;
+            var serviceResponse = new ServiceResponse<List<PortfolioComponent>>();
+            serviceResponse.Data = portfolioComponents;
+            return serviceResponse;
         }
 
-        public async Task<PortfolioComponent> GetSinglePortfolioComponent(int id)
+        public async Task<ServiceResponse<PortfolioComponent>> GetSinglePortfolioComponent(int id)
         {
+            var serviceResponse = new ServiceResponse<PortfolioComponent>();
             var portfolioComponent = portfolioComponents.Find(x => x.Id == id);
 
             if (portfolioComponent == null)
                 return null;
 
-            return portfolioComponent;
+            serviceResponse.Data = portfolioComponent;
+            return serviceResponse;
         }
 
-        public async Task<List<PortfolioComponent>> UpdatePortfolioComponent(int id, PortfolioComponent request)
+        public async Task<ServiceResponse<List<PortfolioComponent>>> UpdatePortfolioComponent(int id, PortfolioComponent request)
         {
+            var serviceResponse = new ServiceResponse<List<PortfolioComponent>>();
             var portfolioComponent = portfolioComponents.Find(x => x.Id == id);
 
             if (portfolioComponent == null)
@@ -61,7 +69,8 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
             portfolioComponent.Value = request.Value;
             portfolioComponent.Amount = request.Amount;
 
-            return portfolioComponents;
+            serviceResponse.Data = portfolioComponents;
+            return serviceResponse;
         }
     }
 }

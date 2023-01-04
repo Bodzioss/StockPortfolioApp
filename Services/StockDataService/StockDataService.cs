@@ -13,14 +13,17 @@
                 }
         };
 
-        public async Task<List<StockData>> AddStockData(StockData stockData)
+        public async Task<ServiceResponse<List<StockData>>> AddStockData(StockData stockData)
         {
+            var serviceResponse = new ServiceResponse<List<StockData>>();
             stockDatas.Add(stockData);
-            return stockDatas;
+            serviceResponse.Data = stockDatas;
+            return serviceResponse;
         }
 
-        public async Task<List<StockData>> DeleteStockData(int id)
+        public async Task<ServiceResponse<List<StockData>>> DeleteStockData(int id)
         {
+            var serviceResponse = new ServiceResponse<List<StockData>>();
             var stockData = stockDatas.Find(x => x.Id == id);
 
             if (stockData is null)
@@ -28,26 +31,32 @@
 
             stockDatas.Remove(stockData);
 
-            return stockDatas;
+            serviceResponse.Data = stockDatas;
+            return serviceResponse;
         }
 
-        public async Task<StockData> GetSingleStockData(int id)
+        public async Task<ServiceResponse<StockData>> GetSingleStockData(int id)
         {
+            var serviceResponse = new ServiceResponse<StockData>();
             var stockData = stockDatas.Find(x => x.Id == id);
 
             if (stockData is null)
                 return null;
 
-            return stockData;
+            serviceResponse.Data = stockData;
+            return serviceResponse;
         }
 
-        public async Task<List<StockData>> GetAllStockData()
+        public async Task<ServiceResponse<List<StockData>>> GetAllStockData()
         {
-            return stockDatas;
+            var serviceResponse = new ServiceResponse<List<StockData>>();
+            serviceResponse.Data = stockDatas;
+            return serviceResponse;
         }
 
-        public async Task<List<StockData>> UpdateStockData(int id, StockData request)
+        public async Task<ServiceResponse<List<StockData>>> UpdateStockData(int id, StockData request)
         {
+            var serviceResponse = new ServiceResponse<List<StockData>>();
             var stockData = stockDatas.Find(x => x.Id == id);
 
             if (stockData is null)
@@ -58,7 +67,8 @@
             stockData.Volume = request.Volume;
             stockData.RegisterTimestamp = request.RegisterTimestamp;
 
-            return stockDatas;
+            serviceResponse.Data = stockDatas;
+            return serviceResponse;
         }
     }
 }

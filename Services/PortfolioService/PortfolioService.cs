@@ -14,40 +14,49 @@ namespace StockPortfolioApp.Services.PortfolioService
                 }
         };
 
-        public async Task<List<Portfolio>> AddPortfolio(Portfolio portfolio)
+        public async Task<ServiceResponse<List<Portfolio>>> AddPortfolio(Portfolio portfolio)
         {
+            var serviceResponse = new ServiceResponse<List<Portfolio>>();
             portfolios.Add(portfolio);
-            return portfolios;
+            serviceResponse.Data = portfolios;
+            return serviceResponse;
         }
 
-        public async Task<List<Portfolio>> DeletePortfolio(int id)
+        public async Task<ServiceResponse<List<Portfolio>>> DeletePortfolio(int id)
         {
+            var serviceResponse = new ServiceResponse<List<Portfolio>>();
             var portfolio = portfolios.Find(x => x.Id == id);
 
             if (portfolio == null)
                 return null;
 
             portfolios.Remove(portfolio);
-            return portfolios;
+            serviceResponse.Data = portfolios;
+            return serviceResponse;
         }
 
-        public async Task<List<Portfolio>> GetAllPortfolios()
+        public async Task<ServiceResponse<List<Portfolio>>> GetAllPortfolios()
         {
-            return portfolios;
+            var serviceResponse = new ServiceResponse<List<Portfolio>>();
+            serviceResponse.Data = portfolios;
+            return serviceResponse;
         }
 
-        public async Task<Portfolio> GetSinglePortfolio(int id)
+        public async Task<ServiceResponse<Portfolio>> GetSinglePortfolio(int id)
         {
+            var serviceResponse = new ServiceResponse<Portfolio>();
             var portfolio = portfolios.Find(x => x.Id == id);
 
             if (portfolio == null)
                 return null;
 
-            return portfolio;
+            serviceResponse.Data = portfolio;
+            return serviceResponse;
         }
 
-        public async Task<List<Portfolio>> UpdatePortfolio(int id, Portfolio request)
+        public async Task<ServiceResponse<List<Portfolio>>> UpdatePortfolio(int id, Portfolio request)
         {
+            var serviceResponse = new ServiceResponse<List<Portfolio>>();
             var portfolio = portfolios.Find(x => x.Id == id);
 
             if (portfolio == null)
@@ -57,7 +66,8 @@ namespace StockPortfolioApp.Services.PortfolioService
             portfolio.Name = request.Name;
             portfolio.Description = request.Description;
 
-            return portfolios;
+            serviceResponse.Data = portfolios;
+            return serviceResponse;
         }
     }
 }

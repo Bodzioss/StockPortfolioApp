@@ -15,32 +15,32 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<User>>> GetAllUsers()
+        public async Task<ActionResult<ServiceResponse<List<User>>>> GetAllUsers()
         {
             return Ok(await _userService.GetAllUsers());
         }
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetSingleUser(int id)
+        public async Task<ActionResult<ServiceResponse<User>>> GetSingleUser(int id)
         {
             return Ok(await _userService.GetSingleUser(id));
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<User>>> AddUser(User user)
+        public async Task<ActionResult<ServiceResponse<List<User>>>> AddUser(User user)
         {
             return Ok(await _userService.AddUser(user));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<User>>> UpdateUser(int id, User request)
+        public async Task<ActionResult<ServiceResponse<List<User>>>> UpdateUser(int id, User request)
         {
             return Ok(await _userService.UpdateUser(id, request));
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<User>>> DeleteUser(int id)
+        public async Task<ActionResult<ServiceResponse<List<User>>>> DeleteUser(int id)
         {
             return Ok(await _userService.DeleteUser(id));
         }

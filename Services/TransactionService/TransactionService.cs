@@ -13,36 +13,45 @@
             }
         };
 
-        public async Task<List<Transaction>> AddTransaction(Transaction transaction)
+        public async Task<ServiceResponse<List<Transaction>>> AddTransaction(Transaction transaction)
         {
+            var serviceResponse = new ServiceResponse<List<Transaction>>();
             transactions.Add(transaction);
-            return transactions;
+            serviceResponse.Data = transactions;
+            return serviceResponse;
         }
 
-        public async Task<List<Transaction>> DeleteTransaction(int id)
+        public async Task<ServiceResponse<List<Transaction>>> DeleteTransaction(int id)
         {
+            var serviceResponse = new ServiceResponse<List<Transaction>>();
             var transaction = transactions.Find(x => x.Id == id);
 
             if (transaction is null)
                 return null;
 
             transactions.Remove(transaction);
-            return transactions;
+            serviceResponse.Data = transactions;
+            return serviceResponse;
         }
 
-        public async Task<List<Transaction>> GetAllTransactions()
+        public async Task<ServiceResponse<List<Transaction>>> GetAllTransactions()
         {
-            return transactions;
+            var serviceResponse = new ServiceResponse<List<Transaction>>();
+            serviceResponse.Data = transactions;
+            return serviceResponse;
         }
 
-        public async Task<Transaction> GetSingleTransaction(int id)
+        public async Task<ServiceResponse<Transaction>> GetSingleTransaction(int id)
         {
+            var serviceResponse = new ServiceResponse<Transaction>();
             var transaction = transactions.Find(x => x.Id == id);
-            return transaction;
+            serviceResponse.Data = transaction;
+            return serviceResponse;
         }
 
-        public async Task<List<Transaction>> UpdateTransaction(int id, Transaction request)
+        public async Task<ServiceResponse<List<Transaction>>> UpdateTransaction(int id, Transaction request)
         {
+            var serviceResponse = new ServiceResponse<List<Transaction>>();
             var transaction = transactions.Find(x => x.Id == id);
 
             if (transaction is null)
@@ -53,7 +62,8 @@
             transaction.Value = request.Value;
             transaction.Amount = request.Amount;
 
-            return transactions;
+            serviceResponse.Data = transactions;
+            return serviceResponse;
         }
     }
 }
