@@ -5,7 +5,7 @@ namespace StockPortfolioApp.Services.StockDataService
 {
     public interface IStockDataService
     {
-        List<StockData> GetStockData();
+        List<StockData> GetAllStockData();
         StockData GetSingleStockData(int id);
         List<StockData> AddStockData(StockData stockData);
         List<StockData> UpdateStockData(int id, StockData request);

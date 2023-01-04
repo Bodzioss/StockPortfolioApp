@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Services.PortfolioService;
 
 namespace StockPortfolioApp.Controllers
 {
@@ -8,65 +7,41 @@ namespace StockPortfolioApp.Controllers
     [ApiController]
     public class PortfolioController : ControllerBase
     {
-        public static List<Portfolio> portfolios = new List<Portfolio> { 
-                new Portfolio
-                {
-                    Id = 1,
-                    UserId = 1,
-                    Name = "First Portfolio Name",
-                    Description = "First Portfolio Description",
-                }
-        };
+        private readonly IPortfolioService _portfolioService;
+
+        public PortfolioController(IPortfolioService portfolioService)
+        {
+            _portfolioService = portfolioService;
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<Portfolio>>> GetAllPortfolios()
         {
-            return Ok(portfolios);
+            return Ok(_portfolioService.GetAllPortfolios());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Portfolio>> GetSinglePortfolio(int id)
         {
-            var portfolio = portfolios.Find(x => x.Id == id);
-
-            if (portfolio == null)
-                return NotFound("Sorry, but this portfolio does not exist.");
-
-            return Ok(portfolio);
+            return Ok(_portfolioService.GetSinglePortfolio(id));
         }
 
         [HttpPost]
         public async Task<ActionResult<List<Portfolio>>> AddPortfolio(Portfolio portfolio)
         {
-            portfolios.Add(portfolio);
-            return Ok(portfolios);
+            return Ok(_portfolioService.AddPortfolio(portfolio));
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Portfolio>>> UpdatePortfolio(int id, Portfolio request)
         {
-            var portfolio = portfolios.Find(x => x.Id == id);
-
-            if (portfolio == null)
-                return NotFound("Sorry, but this portfolio does not exist.");
-
-            portfolio.UserId = request.UserId;
-            portfolio.Name = request.Name;
-            portfolio.Description = request.Description;
-
-            return Ok(portfolios);
+            return Ok(_portfolioService.UpdatePortfolio(id, request));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Portfolio>>> DeletePortfolio(int id)
         {
-            var portfolio = portfolios.Find(x => x.Id == id);
-
-            if (portfolio == null)
-                return NotFound("Sorry, but this portfolio does not exist.");
-
-            portfolios.Remove(portfolio);
-            return Ok(portfolios);
+            return Ok(_portfolioService.DeletePortfolio(id));
         }
     }
 }

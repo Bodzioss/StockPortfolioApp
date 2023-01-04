@@ -2,29 +2,59 @@
 {
     public class UserService : IUserService
     {
+        private static List<User> users = new List<User> {
+            new User
+            {
+                Id = 1,
+                FirstName = "First Name",
+                LastName = "Last Name",
+            }
+        };
+
         public List<User> AddUser(User user)
         {
-            throw new NotImplementedException();
+            users.Add(user);
+            return users;
         }
 
         public List<User> DeleteUser(int id)
         {
-            throw new NotImplementedException();
+            var user = users.Find(x => x.Id == id);
+
+            if (user is null)
+                return null;
+
+            users.Remove(user);
+
+            return users;
         }
 
         public List<User> GetAllUsers()
         {
-            throw new NotImplementedException();
+            return users;
         }
 
         public User GetSingleUser(int id)
         {
-            throw new NotImplementedException();
+            var user = users.Find(x => x.Id == id);
+
+            if (user is null)
+                return null;
+
+            return user;
         }
 
-        public List<User> UpdateUsera(int id, User request)
+        public List<User> UpdateUser(int id, User request)
         {
-            throw new NotImplementedException();
+            var user = users.Find(x => x.Id == id);
+
+            if (user is null)
+                return null;
+
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+
+            return users;
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Services.TransactionService;
 
 namespace StockPortfolioApp.Controllers
 {
@@ -8,63 +7,41 @@ namespace StockPortfolioApp.Controllers
     [ApiController]
     public class TransactionController : ControllerBase
     {
-        private static List<Transaction> transactions = new List<Transaction> {
-            new Transaction
-            {
-                Id = 1,
-                StockId = 1,
-                PortfolioId = 1,
-                Value = 1,
-                Amount = 1
-            }
-        };
+        private readonly ITransactionService _transactionService;
+
+        public TransactionController(ITransactionService transactionService)
+        {
+            _transactionService = transactionService;
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<Transaction>>> GetAllTransactions()
         {
-            return Ok(transactions);
+            return Ok(_transactionService.GetAllTransactions());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Transaction>> GetSingleTransaction(int id)
         {
-            var transaction = transactions.Find(x => x.Id == id);
-            return Ok(transaction);
+            return Ok(_transactionService.GetSingleTransaction(id));
         }
 
         [HttpPost]
         public async Task<ActionResult<List<Transaction>>> AddTransaction(Transaction transaction)
         {
-            transactions.Add(transaction);
-            return Ok(transactions);
+            return Ok(_transactionService.AddTransaction(transaction));
         }
 
         [HttpPut]
         public async Task<ActionResult<List<Transaction>>> UpdateTransaction(int id, Transaction request)
         {
-            var transaction = transactions.Find(x => x.Id == id);
-
-            if(transaction is null)
-                return NotFound("Sorry, but this transaction does not exists.");
-
-            transaction.StockId = request.StockId;
-            transaction.PortfolioId= request.PortfolioId;
-            transaction.Value = request.Value;
-            transaction.Amount = request.Amount;
-
-            return Ok(transactions);
+            return Ok(_transactionService.UpdateTransaction(id, request));
         }
 
         [HttpDelete]
         public async Task<ActionResult<List<Transaction>>> DeleteTransaction(int id)
         {
-            var transaction = transactions.Find(x => x.Id == id);
-
-            if (transaction is null)
-                return NotFound("Sorry, but this transaction does not exists.");
-
-            transactions.Remove(transaction);
-            return Ok(transactions);
+            return Ok(_transactionService.DeleteTransaction(id));
         }
     }
 }

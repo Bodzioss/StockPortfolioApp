@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Services.StockDataService;
 
 namespace StockPortfolioApp.Controllers
 {
@@ -8,69 +7,42 @@ namespace StockPortfolioApp.Controllers
     [ApiController]
     public class StockDataController : ControllerBase
     {
-        public static List<StockData> stockDatas = new List<StockData>() { 
-                new StockData
-                {
-                    Id = 1,
-                    StockId = 1,
-                    Value = 1,
-                    Volume = 1,
-                    RegisterTimestamp = DateTime.Now
-                }
-        };
+        private readonly IStockDataService _stockDataService;
+
+        public StockDataController(IStockDataService stockDataService)
+        {
+            _stockDataService = stockDataService;
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<StockData>>> GetAllStockDatas()
         {
-            return Ok(stockDatas);
+            return Ok(_stockDataService.GetAllStockData());
         }
 
 
         [HttpGet("{id}")]
         public async Task<ActionResult<StockData>> GetSingleStockData(int id)
         {
-            var stockData = stockDatas.Find(x => x.Id == id);
-
-            if (stockData is null)
-                return NotFound("Sorry, but this StockData does not exist.");
-
-            return Ok(stockData);
+            return Ok(_stockDataService.GetSingleStockData(id));
         }
 
         [HttpPost]
         public async Task<ActionResult<List<StockData>>> AddStockData(StockData stockData)
         {
-            stockDatas.Add(stockData);
-            return Ok(stockDatas);
+            return Ok(_stockDataService.AddStockData(stockData));
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<List<StockData>>> UpdateStockData(int id, StockData request)
         {
-            var stockData = stockDatas.Find(x => x.Id == id);
-
-            if (stockData is null)
-                return NotFound("Sorry, but this StockData does not exist.");
-
-            stockData.StockId = request.StockId;
-            stockData.Value = request.Value;
-            stockData.Volume = request.Volume;
-            stockData.RegisterTimestamp = request.RegisterTimestamp;
-
-            return Ok(stockDatas);
+            return Ok(_stockDataService.UpdateStockData(id,request));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<StockData>>> DeleteStockData(int id)
         {
-            var stockData = stockDatas.Find(x => x.Id == id);
-
-            if (stockData is null)
-                return NotFound("Sorry, but this StockData does not exist.");
-
-            stockDatas.Remove(stockData);
-
-            return Ok(stockDatas);
+            return Ok(_stockDataService.DeleteStockData(id));
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockPortfolioApp.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using StockPortfolioApp.Services.StockService;
 
 namespace StockPortfolioApp.Controllers
 {
@@ -8,67 +7,41 @@ namespace StockPortfolioApp.Controllers
     [ApiController]
     public class StockController : ControllerBase
     {
-        public static List<Stock> stocks = new List<Stock> { 
-                new Stock
-                {
-                    Id = 1,
-                    Name = "CDProjektRed",
-                    Ticker = "CDP",
-                    StockExchangeId = 1
-                }
-        };
- 
+        private readonly IStockService _stockService;
+
+        public StockController(IStockService stockService)
+        {
+            _stockService = stockService;
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<Stock>>> GetAllStocks()
         {
-            return Ok(stocks);
+            return Ok(_stockService.GetAllStocks());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Stock>> GetSingleStock(int id)
         {
-            var stock = stocks.Find(x => x.Id == id);
-
-            if (stock == null)
-                return NotFound("Sorry, but this stock does not exist.");
-
-            return Ok(stock);
+            return Ok(_stockService.GetSingleStock(id));
         }
 
         [HttpPost]
         public async Task<ActionResult<List<Stock>>> AddStock(Stock stock)
         {
-            stocks.Add(stock);
-            return Ok(stocks);
+            return Ok(_stockService.AddStock(stock));
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Stock>>> UpdateStock(int id, Stock request)
         {
-            var stock = stocks.Find(x => x.Id == id);
-
-            if (stock == null)
-                return NotFound("Sorry, but this stock does not exist.");
-
-            stock.Name = request.Name;
-            stock.Ticker = request.Ticker;
-            stock.StockExchangeId= request.StockExchangeId;
-
-            return Ok(stocks);
+            return Ok(_stockService.UpdateStock(id, request));
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Stock>>> DeleteStock(int id)
         {
-            var stock = stocks.Find(x => x.Id == id);
-
-            if (stock == null)
-                return NotFound("Sorry, but this stock does not exist.");
-
-            stocks.Remove(stock);
-
-            return Ok(stocks);
+            return Ok(_stockService.DeleteStock(id));
         }
     }
 }
