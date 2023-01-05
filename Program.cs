@@ -26,6 +26,7 @@ builder.Services.AddScoped<IStockExchangeService, StockExchangeService>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
