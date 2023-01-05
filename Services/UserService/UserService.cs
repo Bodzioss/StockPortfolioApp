@@ -6,26 +6,21 @@ namespace StockPortfolioApp.Services.UserService
 {
     public class UserService : IUserService
     {
-        private static List<User> users = new List<User> {
-            new User
-            {
-                Id = 1,
-                FirstName = "First Name",
-                LastName = "Last Name",
-            }
-        };
+        private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public UserService(IMapper mapper)
+        public UserService(IMapper mapper, DataContext context)
         {
+            _context = context;
             _mapper = mapper;
         }
 
         public async Task<ServiceResponse<List<GetUserDto>>> AddUser(AddUserDto user)
         {
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
-            users.Add(_mapper.Map<User>(user));
-            serviceResponse.Data = users.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
+            _context.Users.Add(_mapper.Map<User>(user));
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = await _context.Users.Select(user => _mapper.Map<GetUserDto>(user)).ToListAsync();
             return serviceResponse;
         }
 
@@ -34,14 +29,14 @@ namespace StockPortfolioApp.Services.UserService
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
             try
             {
-                var user = users.Find(x => x.Id == id);
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (user is null)
                     throw new Exception($"User with Id '{id}' not found.");
 
-                users.Remove(user);
+                _context.Users.Remove(user);
 
-                serviceResponse.Data = users.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
+                serviceResponse.Data = await _context.Users.Select(user => _mapper.Map<GetUserDto>(user)).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -54,7 +49,7 @@ namespace StockPortfolioApp.Services.UserService
         public async Task<ServiceResponse<List<GetUserDto>>> GetAllUsers()
         {
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
-            serviceResponse.Data = users.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
+            serviceResponse.Data = await _context.Users.Select(user => _mapper.Map<GetUserDto>(user)).ToListAsync();
             return serviceResponse;
         }
 
@@ -63,7 +58,7 @@ namespace StockPortfolioApp.Services.UserService
             var serviceResponse = new ServiceResponse<GetUserDto>();
             try
             {
-                var user = users.Find(x => x.Id == id);
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (user is null)
                     throw new Exception($"User with Id '{id}' not found.");
@@ -83,7 +78,7 @@ namespace StockPortfolioApp.Services.UserService
             var serviceResponse = new ServiceResponse<List<GetUserDto>>();
             try
             {
-                var user = users.Find(x => x.Id == id);
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (user is null)
                     throw new Exception($"User with Id '{id}' not found.");
@@ -91,7 +86,7 @@ namespace StockPortfolioApp.Services.UserService
                 user.FirstName = request.FirstName;
                 user.LastName = request.LastName;
 
-                serviceResponse.Data = users.Select(user => _mapper.Map<GetUserDto>(user)).ToList();
+                serviceResponse.Data = await _context.Users.Select(user => _mapper.Map<GetUserDto>(user)).ToListAsync();
             }
             catch (Exception ex)
             {

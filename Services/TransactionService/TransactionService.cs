@@ -5,28 +5,21 @@ namespace StockPortfolioApp.Services.TransactionService
 {
     public class TransactionService : ITransactionService
     {
-        private static List<Transaction> transactions = new List<Transaction> {
-            new Transaction
-            {
-                Id = 1,
-                StockId = 1,
-                PortfolioId = 1,
-                Value = 1,
-                Amount = 1
-            }
-        };
+        private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public TransactionService(IMapper mapper)
+        public TransactionService(IMapper mapper, DataContext context)
         {
+            _context = context;
             _mapper = mapper;
         }
 
         public async Task<ServiceResponse<List<GetTransactionDto>>> AddTransaction(AddTransactionDto transaction)
         {
             var serviceResponse = new ServiceResponse<List<GetTransactionDto>>();
-            transactions.Add(_mapper.Map<Transaction>(transaction));
-            serviceResponse.Data = transactions.Select(transaction => _mapper.Map<GetTransactionDto>(transaction)).ToList();
+            _context.Transactions.Add(_mapper.Map<Transaction>(transaction));
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = await _context.Transactions.Select(transaction => _mapper.Map<GetTransactionDto>(transaction)).ToListAsync();
             return serviceResponse;
         }
 
@@ -35,13 +28,13 @@ namespace StockPortfolioApp.Services.TransactionService
             var serviceResponse = new ServiceResponse<List<GetTransactionDto>>();
             try
             {
-                var transaction = transactions.Find(x => x.Id == id);
+                var transaction = await _context.Transactions.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (transaction is null)
                     throw new Exception($"Transaction with Id '{id}' not found.");
 
-                transactions.Remove(transaction);
-                serviceResponse.Data = transactions.Select(transaction => _mapper.Map<GetTransactionDto>(transaction)).ToList();
+                _context.Transactions.Remove(transaction);
+                serviceResponse.Data = await _context.Transactions.Select(transaction => _mapper.Map<GetTransactionDto>(transaction)).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -54,7 +47,7 @@ namespace StockPortfolioApp.Services.TransactionService
         public async Task<ServiceResponse<List<GetTransactionDto>>> GetAllTransactions()
         {
             var serviceResponse = new ServiceResponse<List<GetTransactionDto>>();
-            serviceResponse.Data = transactions.Select(transaction => _mapper.Map<GetTransactionDto>(transaction)).ToList();
+            serviceResponse.Data = await _context.Transactions.Select(transaction => _mapper.Map<GetTransactionDto>(transaction)).ToListAsync();
             return serviceResponse;
         }
 
@@ -63,7 +56,7 @@ namespace StockPortfolioApp.Services.TransactionService
             var serviceResponse = new ServiceResponse<GetTransactionDto>();
             try
             {
-                var transaction = transactions.Find(x => x.Id == id);
+                var transaction = await _context.Transactions.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (transaction is null)
                     throw new Exception($"Transaction with Id '{id}' not found.");
@@ -83,7 +76,7 @@ namespace StockPortfolioApp.Services.TransactionService
             var serviceResponse = new ServiceResponse<List<GetTransactionDto>>();
             try
             {
-                var transaction = transactions.Find(x => x.Id == id);
+                var transaction = await _context.Transactions.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (transaction is null)
                     throw new Exception($"Transaction with Id '{id}' not found.");
@@ -93,7 +86,7 @@ namespace StockPortfolioApp.Services.TransactionService
                 transaction.Value = request.Value;
                 transaction.Amount = request.Amount;
 
-                serviceResponse.Data = transactions.Select(transaction => _mapper.Map<GetTransactionDto>(transaction)).ToList();
+                serviceResponse.Data = await _context.Transactions.Select(transaction => _mapper.Map<GetTransactionDto>(transaction)).ToListAsync();
             }
             catch (Exception ex)
             {
