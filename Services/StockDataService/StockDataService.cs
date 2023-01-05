@@ -11,7 +11,7 @@ namespace StockPortfolioApp.Services.StockDataService
 
         public StockDataService(IMapper mapper, DataContext context)
         {
-            _context = context
+            _context = context;
             _mapper = mapper;
         }
 

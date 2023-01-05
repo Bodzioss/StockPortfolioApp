@@ -58,7 +58,7 @@ namespace StockPortfolioApp.Services.UserService
             var serviceResponse = new ServiceResponse<GetUserDto>();
             try
             {
-                var user = _context.Users.FirstOrDefault(x => x.Id == id);
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (user is null)
                     throw new Exception($"User with Id '{id}' not found.");

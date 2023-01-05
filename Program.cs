@@ -1,6 +1,7 @@
 global using StockPortfolioApp.Models;
 global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
+global using StockPortfolioApp.Data;
 using StockPortfolioApp.Services.PortfolioComponentService;
 using StockPortfolioApp.Services.PortfolioService;
 using StockPortfolioApp.Services.StockDataService;
@@ -8,7 +9,7 @@ using StockPortfolioApp.Services.StockService;
 using StockPortfolioApp.Services.TransactionService;
 using StockPortfolioApp.Services.UserService;
 using StockPortfolioApp.Services.StockExchangeService;
-global using StockPortfolioApp.Data;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
