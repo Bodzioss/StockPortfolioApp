@@ -6,27 +6,21 @@ namespace StockPortfolioApp.Services.StockService
 {
     public class StockService : IStockService
     {
-        public static List<Stock> stocks = new List<Stock> {
-                new Stock
-                {
-                    Id = 1,
-                    Name = "CDProjektRed",
-                    Ticker = "CDP",
-                    StockExchangeId = 1
-                }
-        };
+        private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public StockService(IMapper mapper)
+        public StockService(IMapper mapper, DataContext context)
         {
+            _context = context;
             _mapper = mapper;
         }
 
         public async Task<ServiceResponse<List<GetStockDto>>> AddStock(AddStockDto stock)
         {
             var serviceResponse = new ServiceResponse<List<GetStockDto>>();
-            stocks.Add(_mapper.Map<Stock>(stock));
-            serviceResponse.Data = stocks.Select(stock => _mapper.Map<GetStockDto>(stock)).ToList();
+            _context.Stocks.Add(_mapper.Map<Stock>(stock));
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = await _context.Stocks.Select(stock => _mapper.Map<GetStockDto>(stock)).ToListAsync();
             return serviceResponse;
         }
 
@@ -35,14 +29,14 @@ namespace StockPortfolioApp.Services.StockService
             var serviceResponse = new ServiceResponse<List<GetStockDto>>();
             try
             {
-                var stock = stocks.Find(x => x.Id == id);
+                var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (stock == null)
                     throw new Exception($"Stock with Id '{id}' not found.");
 
-                stocks.Remove(stock);
+                _context.Stocks.Remove(stock);
 
-                serviceResponse.Data = stocks.Select(stock => _mapper.Map<GetStockDto>(stock)).ToList();
+                serviceResponse.Data = await _context.Stocks.Select(stock => _mapper.Map<GetStockDto>(stock)).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -55,7 +49,7 @@ namespace StockPortfolioApp.Services.StockService
         public async Task<ServiceResponse<List<GetStockDto>>> GetAllStocks()
         {
             var serviceResponse = new ServiceResponse<List<GetStockDto>>();
-            serviceResponse.Data = stocks.Select(stock => _mapper.Map<GetStockDto>(stock)).ToList();
+            serviceResponse.Data = await _context.Stocks.Select(stock => _mapper.Map<GetStockDto>(stock)).ToListAsync();
             return serviceResponse;
         }
 
@@ -64,7 +58,7 @@ namespace StockPortfolioApp.Services.StockService
             var serviceResponse = new ServiceResponse<GetStockDto>();
             try
             {
-                var stock = stocks.Find(x => x.Id == id);
+                var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (stock == null)
                     throw new Exception($"Stock with Id '{id}' not found.");
@@ -84,7 +78,7 @@ namespace StockPortfolioApp.Services.StockService
             var serviceResponse = new ServiceResponse<List<GetStockDto>>();
             try
             {
-                var stock = stocks.Find(x => x.Id == id);
+                var stock = await _context.Stocks.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (stock == null)
                     throw new Exception($"Stock with Id '{id}' not found.");
@@ -93,7 +87,7 @@ namespace StockPortfolioApp.Services.StockService
                 stock.Ticker = request.Ticker;
                 stock.StockExchangeId = request.StockExchangeId;
 
-                serviceResponse.Data = stocks.Select(stock => _mapper.Map<GetStockDto>(stock)).ToList();
+                serviceResponse.Data = await _context.Stocks.Select(stock => _mapper.Map<GetStockDto>(stock)).ToListAsync();
             }
             catch (Exception ex)
             {

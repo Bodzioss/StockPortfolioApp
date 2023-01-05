@@ -4,28 +4,21 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
 {
     public class PortfolioComponentService : IPortfolioComponentService
     {
-        public static List<PortfolioComponent> portfolioComponents = new List<PortfolioComponent>{
-                new PortfolioComponent
-                {
-                    Id = 1,
-                    PortfolioId = 1,
-                    StockId = 1,
-                    Value = 195,
-                    Amount = 1
-                }
-        };
+        private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public PortfolioComponentService(IMapper mapper)
+        public PortfolioComponentService(IMapper mapper, DataContext context)
         {
+            _context = context;
             _mapper = mapper;
         }
 
         public async Task<ServiceResponse<List<GetPortfolioComponentDto>>> AddPortfolioComponent(AddPortfolioComponentDto portfolioComponent)
         {
             var serviceResponse = new ServiceResponse<List<GetPortfolioComponentDto>>();
-            portfolioComponents.Add(_mapper.Map<PortfolioComponent>(portfolioComponent));
-            serviceResponse.Data = portfolioComponents.Select(portfolioComponent =>  _mapper.Map<GetPortfolioComponentDto>(portfolioComponent)).ToList();
+            _context.PortfolioComponents.Add(_mapper.Map<PortfolioComponent>(portfolioComponent));
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = await _context.PortfolioComponents.Select(portfolioComponent =>  _mapper.Map<GetPortfolioComponentDto>(portfolioComponent)).ToListAsync();
             return serviceResponse;
         }
 
@@ -34,14 +27,14 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
             var serviceResponse = new ServiceResponse<List<GetPortfolioComponentDto>>();
             try
             {
-                var portfolioComponent = portfolioComponents.FirstOrDefault(x => x.Id == id);
+                var portfolioComponent = await _context.PortfolioComponents.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (portfolioComponent == null)
                     throw new Exception($"Portfolio component with Id '{id}' not found.");
 
-                portfolioComponents.Remove(portfolioComponent);
+                _context.PortfolioComponents.Remove(portfolioComponent);
 
-                serviceResponse.Data = portfolioComponents.Select(portfolioComponent => _mapper.Map<GetPortfolioComponentDto>(portfolioComponent)).ToList();
+                serviceResponse.Data = await _context.PortfolioComponents.Select(portfolioComponent => _mapper.Map<GetPortfolioComponentDto>(portfolioComponent)).ToListAsync();
             }
             catch(Exception ex)
             {
@@ -54,6 +47,7 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
         public async Task<ServiceResponse<List<GetPortfolioComponentDto>>> GetAllPortfolioComponents()
         {
             var serviceResponse = new ServiceResponse<List<GetPortfolioComponentDto>>();
+            var portfolioComponents = await _context.PortfolioComponents.ToListAsync();
             serviceResponse.Data = portfolioComponents.Select(portfolioComponent => _mapper.Map<GetPortfolioComponentDto>(portfolioComponent)).ToList();
             return serviceResponse;
         }
@@ -63,7 +57,7 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
             var serviceResponse = new ServiceResponse<GetPortfolioComponentDto>();
             try
             {
-                var portfolioComponent = portfolioComponents.FirstOrDefault(x => x.Id == id);
+                var portfolioComponent = await _context.PortfolioComponents.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (portfolioComponent == null)
                     throw new Exception($"Portfolio component with Id '{id}' not found.");
@@ -83,7 +77,7 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
             var serviceResponse = new ServiceResponse<List<GetPortfolioComponentDto>>();
             try
             { 
-                var portfolioComponent = portfolioComponents.FirstOrDefault(x => x.Id == id);
+                var portfolioComponent = await _context.PortfolioComponents.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (portfolioComponent == null)
                     throw new Exception($"Portfolio component with Id '{id}' not found.");
@@ -93,7 +87,9 @@ namespace StockPortfolioApp.Services.PortfolioComponentService
                 portfolioComponent.Value = request.Value;
                 portfolioComponent.Amount = request.Amount;
 
-                serviceResponse.Data = portfolioComponents.Select(portfolioComponent => _mapper.Map<GetPortfolioComponentDto>(portfolioComponent)).ToList();
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = await _context.PortfolioComponents.Select(portfolioComponent => _mapper.Map<GetPortfolioComponentDto>(portfolioComponent)).ToListAsync();
             }
             catch(Exception ex)
             {

@@ -5,27 +5,21 @@ namespace StockPortfolioApp.Services.StockExchangeService
 {
     public class StockExchangeService : IStockExchangeService
     {
-        public static List<StockExchange> stockExchanges = new List<StockExchange>() {
-                new StockExchange
-                {
-                    Id = 1,
-                    Name = "1",
-                    Country = "1"
-                }
-        };
-
+        private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public StockExchangeService(IMapper mapper)
+        public StockExchangeService(IMapper mapper, DataContext context)
         {
+            _context = context;
             _mapper = mapper;
         }
 
         public async Task<ServiceResponse<List<GetStockExchangeDto>>> AddStockExchange(AddStockExchangeDto stockExchange)
         {
             var serviceResponse = new ServiceResponse<List<GetStockExchangeDto>>();
-            stockExchanges.Add(_mapper.Map<StockExchange>(stockExchange));
-            serviceResponse.Data = stockExchanges.Select(stockExchange => _mapper.Map<GetStockExchangeDto>(stockExchange)).ToList();
+            _context.StockExchange.Add(_mapper.Map<StockExchange>(stockExchange));
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = await _context.StockExchange.Select(stockExchange => _mapper.Map<GetStockExchangeDto>(stockExchange)).ToListAsync();
             return serviceResponse;
         }
 
@@ -34,13 +28,13 @@ namespace StockPortfolioApp.Services.StockExchangeService
             var serviceResponse = new ServiceResponse<List<GetStockExchangeDto>>();
             try
             {
-                var stockExchange = stockExchanges.Find(x => x.Id == id);
+                var stockExchange = await _context.StockExchange.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (stockExchange is null)
                     throw new Exception($"Stock data with Id '{id}' not found.");
-                stockExchanges.Remove(stockExchange);
+                _context.StockExchange.Remove(stockExchange);
 
-                serviceResponse.Data = stockExchanges.Select(stockExchange => _mapper.Map<GetStockExchangeDto>(stockExchange)).ToList();
+                serviceResponse.Data = await _context.StockExchange.Select(stockExchange => _mapper.Map<GetStockExchangeDto>(stockExchange)).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -55,7 +49,7 @@ namespace StockPortfolioApp.Services.StockExchangeService
             var serviceResponse = new ServiceResponse<GetStockExchangeDto>();
             try
             {
-                var stockExchange = stockExchanges.Find(x => x.Id == id);
+                var stockExchange = await _context.StockExchange.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (stockExchange is null)
                     throw new Exception($"Stock data with Id '{id}' not found.");
@@ -73,7 +67,7 @@ namespace StockPortfolioApp.Services.StockExchangeService
         public async Task<ServiceResponse<List<GetStockExchangeDto>>> GetAllStockExchange()
         {
             var serviceResponse = new ServiceResponse<List<GetStockExchangeDto>>();
-            serviceResponse.Data = stockExchanges.Select(stockExchange => _mapper.Map<GetStockExchangeDto>(stockExchange)).ToList();
+            serviceResponse.Data = await _context.StockExchange.Select(stockExchange => _mapper.Map<GetStockExchangeDto>(stockExchange)).ToListAsync();
             return serviceResponse;
         }
 
@@ -82,7 +76,7 @@ namespace StockPortfolioApp.Services.StockExchangeService
             var serviceResponse = new ServiceResponse<List<GetStockExchangeDto>>();
             try
             {
-                var stockExchange = stockExchanges.FirstOrDefault(x => x.Id == id);
+                var stockExchange = await _context.StockExchange.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (stockExchange is null)
                     throw new Exception($"Stock data with Id '{id}' not found.");
@@ -90,7 +84,7 @@ namespace StockPortfolioApp.Services.StockExchangeService
                 stockExchange.Name = request.Name;
                 stockExchange.Country = request.Country;
 
-                serviceResponse.Data = stockExchanges.Select(stockExchange => _mapper.Map<GetStockExchangeDto>(stockExchange)).ToList();
+                serviceResponse.Data = await _context.StockExchange.Select(stockExchange => _mapper.Map<GetStockExchangeDto>(stockExchange)).ToListAsync();
             }
             catch (Exception ex)
             {
