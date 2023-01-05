@@ -10,5 +10,6 @@ namespace StockPortfolioApp.Models
         public Decimal Value { get; set; }
         public int Volume { get; set; }
         public DateTime RegisterTimestamp { get; set; }
+        public Stock? Stock { get; set; }
     }
 }

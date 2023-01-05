@@ -7,5 +7,6 @@ namespace StockPortfolioApp.Models
         public int Id { get; set; }
         public String? FirstName { get; set; }
         public String? LastName { get; set; }
+        public List<Portfolio>? Portfolios { get; set; }
     }
 }

@@ -10,5 +10,7 @@ namespace StockPortfolioApp.Models
         [DataType(DataType.Currency)]
         public Decimal Value { get; set; }
         public int Amount { get; set; }
+        public Portfolio? Portfolio { get; set; }
+        public Stock? Stock { get; set; }
     }
 }
