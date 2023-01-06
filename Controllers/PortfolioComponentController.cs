@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StockPortfolioApp.Dtos.PortfolioComponent;
 using StockPortfolioApp.Services.PortfolioComponentService;
+using System.Security.Claims;
 
 namespace StockPortfolioApp.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PortfolioComponentController : ControllerBase
@@ -16,8 +19,9 @@ namespace StockPortfolioApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ServiceResponse<GetPortfolioComponentDto>>>> GetAllPortfolioComponents()
+        public async Task<ActionResult<List<ServiceResponse<GetPortfolioComponentDto>>>> GetAllPortfolioComponents(int userId)
         {
+            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
             return Ok(await _portfolioComponentService.GetAllPortfolioComponents());
         }
 
