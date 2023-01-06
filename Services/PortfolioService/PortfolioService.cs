@@ -2,6 +2,7 @@
 using StockPortfolioApp.Dtos.Portfolio;
 using StockPortfolioApp.Dtos.PortfolioComponent;
 using StockPortfolioApp.Models;
+using System.Security.Claims;
 
 namespace StockPortfolioApp.Services.PortfolioService
 {
@@ -9,12 +10,16 @@ namespace StockPortfolioApp.Services.PortfolioService
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PortfolioService(IMapper mapper, DataContext context)
+        public PortfolioService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
         public async Task<ServiceResponse<List<GetPortfolioDto>>> AddPortfolio(AddPortfolioDto portfolio)
         {
@@ -47,10 +52,10 @@ namespace StockPortfolioApp.Services.PortfolioService
             return serviceResponse;
         }
 
-        public async Task<ServiceResponse<List<GetPortfolioDto>>> GetAllPortfolios(int userId)
+        public async Task<ServiceResponse<List<GetPortfolioDto>>> GetAllPortfolios()
         {
             var serviceResponse = new ServiceResponse<List<GetPortfolioDto>>();
-            serviceResponse.Data = await _context.Portfolios.Where(c => c.UserId == userId).Select(portfolio => _mapper.Map<GetPortfolioDto>(portfolio)).ToListAsync();
+            serviceResponse.Data = await _context.Portfolios.Where(c => c.UserId == GetUserId()).Select(portfolio => _mapper.Map<GetPortfolioDto>(portfolio)).ToListAsync();
             return serviceResponse;
         }
 

@@ -54,6 +54,7 @@ builder.Services.AddSwaggerGen(c =>
     });
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
