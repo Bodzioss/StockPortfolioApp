@@ -6,11 +6,7 @@ using StockPortfolioApp.Services.PortfolioComponentService;
 using StockPortfolioApp.Services.PortfolioService;
 using StockPortfolioApp.Services.StockDataService;
 using StockPortfolioApp.Services.StockService;
-using StockPortfolioApp.Services.TransactionService;
-using StockPortfolioApp.Services.UserService;
-using StockPortfolioApp.Services.StockExchangeService;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using StockPortfolioApp.Servic
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
