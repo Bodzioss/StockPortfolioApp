@@ -20,10 +20,10 @@ const Topbar = () => {
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
-  const [age, setAge] = React.useState('');
+  const [portfolio, setPortfolio] = React.useState('');
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setPortfolio(event.target.value);
   };
   
   return (
@@ -35,11 +35,11 @@ const Topbar = () => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={age}
-          label="Main Portfolio"
+          value={portfolio}
+          label={portfolio}
           onChange={handleChange}
         >
-          <MenuItem value={10}>Main Portfolio</MenuItem>
+          <MenuItem value={10}>Full Portfolio</MenuItem>
           <MenuItem value={20}>Safe Portfolio</MenuItem>
           <MenuItem value={30}>Agressive Portfolio</MenuItem>
         </Select>

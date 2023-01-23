@@ -100,9 +100,6 @@ const Sidebar = () => {
                 >
                   John Kowalsky
                 </Typography>
-                <Typography variant="h5" color={colors.greenAccent[500]}>
-                  CEO
-                </Typography>
               </Box>
             </Box>
           )}
@@ -111,6 +108,7 @@ const Sidebar = () => {
             <Item
               title="Dashboard"
               to="/"
+
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -121,25 +119,18 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Data
+              Portfolio
             </Typography>
             <Item
-              title="Manage Team"
+              title="Manage Portfolio"
               to="/team"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Contacts Information"
-              to="/contacts"
-              icon={<ContactsOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Invoices Balances"
-              to="/invoices"
+              title="Trading History"
+              to="/history"
               icon={<ReceiptOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -150,7 +141,7 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Pages
+              Personal
             </Typography>
             <Item
               title="Profile Form"
@@ -174,7 +165,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-            <Typography
+            {/* <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
@@ -208,7 +199,7 @@ const Sidebar = () => {
               icon={<MapOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
           </Box>
         </Menu>
       </ProSidebar>
