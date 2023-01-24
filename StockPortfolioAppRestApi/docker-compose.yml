@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  stockportfolioapp:
+    image: ${DOCKER_REGISTRY-}stockportfolioapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+        - "8084:80"
