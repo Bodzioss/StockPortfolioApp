@@ -54,8 +54,8 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="12,361"
-            subtitle="Emails Sent"
+            title="133,92 zł"
+            subtitle="CD Projekt"
             progress="0.75"
             increase="+14%"
             icon={
@@ -73,10 +73,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="431,225"
-            subtitle="Sales Obtained"
+            title="64,84 zł"
+            subtitle="PKN Orlen"
             progress="0.50"
-            increase="+21%"
+            increase="-0,22%"
             icon={
               <PointOfSaleIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -92,8 +92,8 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="32,441"
-            subtitle="New Clients"
+            title="64,42 zł"
+            subtitle="JSW"
             progress="0.30"
             increase="+5%"
             icon={
@@ -111,10 +111,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="1,325,134"
-            subtitle="Traffic Received"
+            title="33,98 zł"
+            subtitle="PKO BP"
             progress="0.80"
-            increase="+43%"
+            increase="+0,21 %"
             icon={
               <TrafficIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
@@ -142,14 +142,14 @@ const Dashboard = () => {
                 fontWeight="600"
                 color={colors.grey[100]}
               >
-                Revenue Generated
+                Portfolio Worth
               </Typography>
               <Typography
                 variant="h3"
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
-                $59,342.32
+                59,342 zł
               </Typography>
             </Box>
             <Box>
@@ -209,7 +209,7 @@ const Dashboard = () => {
                 p="5px 10px"
                 borderRadius="4px"
               >
-                ${transaction.cost}
+                {transaction.cost} zł
               </Box>
             </Box>
           ))}
@@ -223,7 +223,7 @@ const Dashboard = () => {
           p="30px"
         >
           <Typography variant="h5" fontWeight="600">
-            Campaign
+            Portfolio Diversion
           </Typography>
           <Box
             display="flex"
@@ -252,7 +252,7 @@ const Dashboard = () => {
             fontWeight="600"
             sx={{ padding: "30px 30px 0 30px" }}
           >
-            Sales Quantity
+            Components Quantity
           </Typography>
           <Box height="250px" mt="-20px">
             <BarChart isDashboard={true} />
