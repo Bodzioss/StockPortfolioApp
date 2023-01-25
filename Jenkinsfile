@@ -9,7 +9,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'docker build -f StockPortfolioAppRestApi/Dockerfile .'
+        sh 'docker build -f Dockerfile .'
       }
     }
 
