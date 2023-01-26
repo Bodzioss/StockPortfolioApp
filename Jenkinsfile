@@ -8,16 +8,15 @@ pipeline {
     }
 
     stage('Build') {
+      agent {
+        docker {
+          image 'node:lts-alpine'
+          args '-p 3000:3000'
+        }
+
+      }
       steps {
         sh 'docker build -f StockPortfolioAppRestApi/Dockerfile .'
-      }
-    }
-
-    stage('Initialize') {
-      steps {
-        sh '''def dockerHome = tool \'MyDocker\'
-def mavenHome  = tool \'MyMaven\'
-env.PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"'''
       }
     }
 
