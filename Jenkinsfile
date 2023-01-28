@@ -9,7 +9,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'docker build -f StockPortfolioAppRestApi/Dockerfile .'
+        sh 'docker build -f StockPortfolioAppRestApi/Dockerfile . -t bodzioss/stockportfolioapp:latest'
       }
     }
 
@@ -20,6 +20,12 @@ pipeline {
       }
       steps {
         sh 'docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASSWORD'
+      }
+    }
+
+    stage('Docker Push') {
+      steps {
+        sh 'docker push bodzioss/stockportfolioapp:latest'
       }
     }
 
