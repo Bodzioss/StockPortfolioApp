@@ -3,7 +3,10 @@
 FROM jenkins:1.596
  
 USER root
-RUN apt-get update \
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 605C66F00D6C9793 \
+  &&apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 \
+  &&apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138 \
+      apt-get update \
       && apt-get install -y sudo \
       && rm -rf /var/lib/apt/lists/*
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
@@ -11,7 +14,7 @@ RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 USER jenkins
 COPY plugins.txt /usr/share/jenkins/plugins.txt
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
-	
+
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
