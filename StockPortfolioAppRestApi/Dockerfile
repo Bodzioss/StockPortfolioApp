@@ -19,7 +19,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["StockPortfolioAppRestApi/StockPortfolioApp.csproj", "."]
-RUN dotnet restore "./StockPortfolioAppRestApi/StockPortfolioApp.csproj"
+RUN dotnet restore "./StockPortfolioApp.csproj"
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "StockPortfolioApp.csproj" -c Release -o /app/build
