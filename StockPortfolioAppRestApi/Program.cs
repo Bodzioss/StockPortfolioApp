@@ -32,29 +32,38 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value!)),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
-});
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+//{
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuerSigningKey = true,
+//        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value!)),
+//        ValidateIssuer = false,
+//        ValidateAudience = false
+//    };
+//});
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    {
-        Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\" ",
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
-    c.OperationFilter<SecurityRequirementsOperationFilter>();
-});
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+//    {
+//        Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\" ",
+//        In = ParameterLocation.Header,
+//        Name = "Authorization",
+//        Type = SecuritySchemeType.ApiKey
+//    });
+//    c.OperationFilter<SecurityRequirementsOperationFilter>();
+//});
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000");
+        });
+});
 
 var app = builder.Build();
 
@@ -66,6 +75,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthentication();
 
