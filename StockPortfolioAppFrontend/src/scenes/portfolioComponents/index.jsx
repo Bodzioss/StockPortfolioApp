@@ -42,7 +42,6 @@ const PortfolioComponents = () => {
   const getPortfolioComponents = async () => {
     const response = await axios.get(url);
     setUserData(response.data.data);
-    console.log(response.data.data);
   };
 
   useEffect(() => {
