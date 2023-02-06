@@ -19,7 +19,9 @@ namespace StockPortfolioApp.Services.PortfolioService
             _httpContextAccessor = httpContextAccessor;
         }
 
-        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+       // private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
 
         public async Task<ServiceResponse<List<GetPortfolioDto>>> AddPortfolio(AddPortfolioDto portfolio)
         {
@@ -55,7 +57,8 @@ namespace StockPortfolioApp.Services.PortfolioService
         public async Task<ServiceResponse<List<GetPortfolioDto>>> GetAllPortfolios()
         {
             var serviceResponse = new ServiceResponse<List<GetPortfolioDto>>();
-            serviceResponse.Data = await _context.Portfolios.Where(c => c.UserId == GetUserId()).Select(portfolio => _mapper.Map<GetPortfolioDto>(portfolio)).ToListAsync();
+          //  serviceResponse.Data = await _context.Portfolios.Where(c => c.UserId == GetUserId()).Select(portfolio => _mapper.Map<GetPortfolioDto>(portfolio)).ToListAsync();
+            serviceResponse.Data = await _context.Portfolios.Select(portfolio => _mapper.Map<GetPortfolioDto>(portfolio)).ToListAsync();
             return serviceResponse;
         }
 
