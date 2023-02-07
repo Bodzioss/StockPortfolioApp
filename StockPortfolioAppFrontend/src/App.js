@@ -4,6 +4,7 @@ import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
 import PortfolioComponents from "./scenes/portfolioComponents";
+import PortfolioComponentsForm from "./scenes/portfolioComponents/portfolioComponentsAddForm";
 import Bar from "./scenes/bar";
 import Line from "./scenes/line";
 import Pie from "./scenes/pie";
@@ -32,6 +33,7 @@ function App() {
               <Route path="/line" element={<Line />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/calendar" element={<Calendar />} />
+              <Route path="/portfolioComponentsForm" element={<PortfolioComponentsForm/>}/>
             </Routes>
           </main>
         </div>
